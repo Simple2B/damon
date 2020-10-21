@@ -1,9 +1,130 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-  <h1>Welcome!</h1>
-  <hr>
-  <p>Add some content here!</p>
+{% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+          <div class="small alert alert-{{ category }} alert-dismisible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            {{ message }}
+          </div>
+          {% endfor %}
+          {% endif %}
+          {% endwith %}
+<!-- class="border-none ddb-cursor-handle" -->
+<button type="button" data-toggle="modal" data-target="#modalSearch"
+data-target_link=  data-name="{{form}}">Search</button>
+<!-- Edit Modal -->
+<div class="modal" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <h5 class="--padding">Search</h5>
+      <div class="modal-body">
+        <form class="form" role="form" action="{{url_for('main.search_controller')}}" method="post" >
+          <div class="__modal-inputs--flex-row">
+
+            <div>
+              {{form.CustomerName(class='_form-input _form-input--m')}}
+              <label class="_label">CustomerName</label>
+            </div>
+
+            <div>
+              {{form.JobName(class='_form-input _form-input--m')}}
+              <label class="_label">JobName</label>
+            </div>
+
+            <div>
+              {{form.MapscoLocation(class='_form-input _form-input--m')}}
+              <label class="_label">MapscoLocation</label>
+            </div>
+
+            <div>
+              {{form.JobNumber(class='_form-input _form-input--m')}}
+              <label class="_label">JobNumber</label>
+            </div>
+
+            <div>
+              {{form.MaterialName(class='_form-input _form-input--m')}}
+              <label class="_label">MaterialName</label>
+            </div>
+
+            <div>
+              {{form.LoadOutNum(class='_form-input _form-input--m')}}
+              <label class="_label">LoadOutNum</label>
+            </div>
+
+
+
+            <div>
+              {{form.TruckNumber(class='_form-input _form-input--m')}}
+              <label class="_label">TruckNumber</label>
+            </div>
+
+            <div>
+              {{form.SubcontractorName(class='_form-input _form-input--m')}}
+              <label class="_label">SubcontractorName</label>
+            </div>
+
+
+            <div class="">
+              {{ form.submit(class='_btn--gray  ddb-cursor-handle') }}
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of Edit Modal -->
+
+
+
+
+<table border=1 frame=hsides rules=rows,columns style="border:1px solid black;margin-left:auto;margin-right:auto;">
+  <h2 style="text-align: center;">New table</h2>
+  <tr>
+   <th>CustomerName</th>
+   <th>JobName</th>
+   <th>MapscoLocation</th>
+   <th>JobNumber</th>
+   <th>MaterialName</th>
+   <th>LoadOutNum</th>
+   <th>TruckNumber</th>
+   <th>SubcontractorName</th>
+   <th>Loads</th>
+   <th>Status</th>
+  </tr>
+  {% for new_table_item in new_table.items %}
+  <tr>
+    <td>{{ Customer.query.get(Tickets.query.get(new_table_item.TicketID).CustomerID).CustomerName }}</td>
+    <td>{{ Jobs.query.get(Tickets.query.get(new_table_item.TicketID).JobID).JobName }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).MapscoLocation }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).JobNumber }}</td>
+    <td>{{ Materials.query.get(Tickets.query.get(new_table_item.TicketID).MaterialID).MaterialName }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).LoadOutNum }}</td>
+    <td>{{ Trucks.query.get(Tickets.query.get(new_table_item.TicketID).TruckID).TruckNumber }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).SubcontractorName }}</td>
+    <td>{{ new_table_item.Loads }}</td>
+    <td>{{ new_table_item.Status }}</td>
+  </tr>
+  {% endfor %}
+ </table>
+ <div style="margin: 0 auto;">
+  {% for page_num in new_table.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+  {% if page_num %}
+  {% if new_table.page == page_num %}
+    <a class="btn btn-info mb-4" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+  {% else %}
+    <a class="btn btn-outline-info mb-4" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+  {% endif %}
+  {% else %}
+  ...
+  {% endif %}
+  {% endfor %}
 </div>
 {% endblock %}
