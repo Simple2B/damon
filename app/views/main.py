@@ -20,6 +20,15 @@ def index():
     new_table = Assign.query.order_by(Assign.assignID.desc()).paginate(page=page, per_page=15)
     return render_template('index.html', new_table=new_table, form=form, Customer=Customer, Jobs=Jobs, Tickets=Tickets, Trucks=Trucks, Materials=Materials)
 
+@main_blueprint.route('/intransit')
+# @login_required
+def intransit():
+
+    page = request.args.get('page', 1, type=int)
+    new_table = Assign.query.filter(Assign.Status == "InTransit").order_by(Assign.assignID.desc()).paginate(page=page, per_page=15)
+    return render_template('intransit.html', new_table=new_table, Customer=Customer, Jobs=Jobs, Tickets=Tickets, Trucks=Trucks, Materials=Materials)
+
+
 
 @main_blueprint.route('/search', methods=['POST'])
 def search_controller():

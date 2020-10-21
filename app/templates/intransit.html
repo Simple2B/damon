@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+          <div class="small alert alert-{{ category }} alert-dismisible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            {{ message }}
+          </div>
+          {% endfor %}
+          {% endif %}
+          {% endwith %}
+<!-- class="border-none ddb-cursor-handle" -->
+
+
+
+
+<table border=1 frame=hsides rules=rows,columns style="border:1px solid black;margin-left:auto;margin-right:auto;">
+  <h2 style="text-align: center;">InTransit</h2>
+  <tr>
+   <th>CustomerName</th>
+   <th>JobName</th>
+   <th>MapscoLocation</th>
+   <th>JobNumber</th>
+   <th>MaterialName</th>
+   <th>LoadOutNum</th>
+   <th>TruckNumber</th>
+   <th>SubcontractorName</th>
+   <th>Loads</th>
+  </tr>
+  {% for new_table_item in new_table.items %}
+  <tr>
+    <td>{{ Customer.query.get(Tickets.query.get(new_table_item.TicketID).CustomerID).CustomerName }}</td>
+    <td>{{ Jobs.query.get(Tickets.query.get(new_table_item.TicketID).JobID).JobName }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).MapscoLocation }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).JobNumber }}</td>
+    <td>{{ Materials.query.get(Tickets.query.get(new_table_item.TicketID).MaterialID).MaterialName }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).LoadOutNum }}</td>
+    <td>{{ Trucks.query.get(Tickets.query.get(new_table_item.TicketID).TruckID).TruckNumber }}</td>
+    <td>{{ Tickets.query.get(new_table_item.TicketID).SubcontractorName }}</td>
+    <td>{{ new_table_item.Loads }}</td>
+  </tr>
+  {% endfor %}
+ </table>
+ <div style="margin: 0 auto;">
+  {% for page_num in new_table.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+  {% if page_num %}
+  {% if new_table.page == page_num %}
+    <a class="btn btn-info mb-4" href="{{ url_for('main.intransit', page=page_num) }}">{{ page_num }}</a>
+  {% else %}
+    <a class="btn btn-outline-info mb-4" href="{{ url_for('main.intransit', page=page_num) }}">{{ page_num }}</a>
+  {% endif %}
+  {% else %}
+  ...
+  {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}
