@@ -1,6 +1,6 @@
 import uuid
 
-from flask import render_template, Blueprint, request, redirect, flash
+from flask import render_template, Blueprint, request, redirect, flash, url_for
 from flask_login import login_required
 # from sqlalchemy import in_
 
@@ -82,11 +82,17 @@ def add_record(ticket_id):
         print(33333333333)
         print(ticket_id)
         print(333333333333)
-        new = Assign(TicketID=ticket_id, Loads=form.loads.data, Status=form.status.data)
-        assert new.Loads
-        assert new.Status
-        assert new.TicketID
-        new.save()
+        elem = Assign.query.filter(Assign.TicketID == ticket_id).first()
+        if not elem:
+            new = Assign(TicketID=ticket_id, Loads=form.loads.data, Status=form.status.data)
+            assert new.Loads
+            assert new.Status
+            assert new.TicketID
+            new.save()
+        else:
+            elem.Loads = form.loads.data
+            elem.Status = form.status.data
+            elem.save()
     else:
         flash('Wrong data', 'danger')
     return redirect(url_for("main.index"))
