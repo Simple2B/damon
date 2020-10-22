@@ -25,11 +25,6 @@ class User(db.Model, UserMixin, ModelMixin):
     @classmethod
     def authenticate(cls, UserID, Password):
         user = cls.query.filter(User.UserID == UserID).first()
-        print(99999999999)
-        print(Password)
-        print(99999999999999)
-        print(user.Password)
-        print(8888888888888)
         if user is not None and (user.Password == str.encode(Password)):
             return user
 
