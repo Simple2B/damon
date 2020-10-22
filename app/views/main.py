@@ -1,8 +1,8 @@
 import uuid
 
-from flask import render_template, Blueprint, request, redirect, flash, url_for
+from flask import render_template, Blueprint, request, redirect, flash, url_for, session
 from flask_login import login_required
-# from sqlalchemy import in_
+
 
 from app.models import Assign, Tickets, Trucks, Materials, Jobs, Customer
 from app.forms import SearchForm, EditForm
@@ -30,48 +30,63 @@ def intransit():
 
 
 
-@main_blueprint.route('/search', methods=['POST'])
+@main_blueprint.route('/search', methods=["GET", 'POST'])
 def search_controller():
-    form = request.form
-    print(22222222222222222)
+    if request.method == 'POST':
+        form = SearchForm()
+        session['formdata'] = request.form
+    elif request.method == "GET":
+        formdata = session.get('formdata', None)
+        if formdata:
+            form = SearchForm(
+                CustomerName=formdata['CustomerName'],
+                JobName=formdata['JobName'],
+                MapscoLocation=formdata['MapscoLocation'],
+                JobNumber=formdata['JobNumber'],
+                MaterialName=formdata['MaterialName'],
+                LoadOutNum=formdata['LoadOutNum'],
+                TruckNumber=formdata['TruckNumber'],
+                SubcontractorName=formdata['SubcontractorName']
+                )
+            form.validate()
     prepare = None
-    if form['SubcontractorName']:
-        prepare = Tickets.query.filter(Tickets.SubcontractorName == form['SubcontractorName'])
-    if form['JobNumber'] and (prepare is None):
-        prepare = Tickets.query.filter(Tickets.JobNumber == form['JobNumber'])
-    elif form['JobNumber'] and prepare:
-        prepare = prepare.filter(Tickets.JobNumber == form['JobNumber'])
-    if form['MapscoLocation'] and (prepare is None):
-        prepare = Tickets.query.filter(Tickets.JobNumber == form['MapscoLocation'])
-    elif form['MapscoLocation'] and prepare:
-        prepare = prepare.filter(Tickets.MapscoLocation == form['MapscoLocation'])
-    if form['LoadOutNum'] and (prepare is None):
-        prepare = Tickets.query.filter(Tickets.LoadOutNum == form['LoadOutNum'])
-    elif form['LoadOutNum'] and prepare:
-        prepare = prepare.filter(Tickets.LoadOutNum == form['LoadOutNum'])
-    if form['TruckNumber']:
-        trucks = Trucks.query.filter(Trucks.TruckNumber == ['TruckNumber']).all()
+    if form.SubcontractorName.data:
+        prepare = Tickets.query.filter(Tickets.SubcontractorName == form.SubcontractorName.data)
+    if form.JobNumber.data and (prepare is None):
+        prepare = Tickets.query.filter(Tickets.JobNumber == form.JobNumber.data)
+    elif form.JobNumber.data and prepare:
+        prepare = prepare.filter(Tickets.JobNumber == form.JobNumber.data)
+    if form.MapscoLocation.data and (prepare is None):
+        prepare = Tickets.query.filter(Tickets.JobNumber == form.MapscoLocation.data)
+    elif form.MapscoLocation.data and prepare:
+        prepare = prepare.filter(Tickets.MapscoLocation == form.MapscoLocation.data)
+    if form.LoadOutNum.data and (prepare is None):
+        prepare = Tickets.query.filter(Tickets.LoadOutNum == form.LoadOutNum.data)
+    elif form.LoadOutNum.data and prepare:
+        prepare = prepare.filter(Tickets.LoadOutNum == form.LoadOutNum.data)
+    if form.TruckNumber.data:
+        trucks = Trucks.query.filter(Trucks.TruckNumber == form.TruckNumber.data).all()
         truckids = [x.TruckID for x in trucks]
         if prepare is None:
             prepare = Tickets.query.filter(Tickets.TruckID.in_(truckids))
         else:
             prepare = prepare.filter(Tickets.TruckID.in_(truckids))
-    if form['MaterialName']:
-        materials = Materials.query.filter(Materials.MaterialName == form['MaterialName']).all()
+    if form.MaterialName.data:
+        materials = Materials.query.filter(Materials.MaterialName == form.MaterialName.data).all()
         materialids = [x.MaterialID for x in materials]
         if prepare is None:
             prepare = Tickets.query.filter(Tickets.MaterialID.in_(materialids))
         else:
             prepare = prepare.filter(Tickets.MaterialID.in_(materialids))
-    if form['JobName']:
-        jobs = Jobs.query.filter(Jobs.JobName == form['JobName']).all()
+    if form.JobName.data:
+        jobs = Jobs.query.filter(Jobs.JobName == form.JobName.data).all()
         jobids = [x.JobID for x in jobs]
         if prepare is None:
             prepare = Tickets.query.filter(Tickets.JobID.in_(jobids))
         else:
             prepare = prepare.filter(Tickets.JobID.in_(jobids))
-    if form['CustomerName']:
-        customers = Customer.query.filter(Customer.CustomerName == form['CustomerName']).all()
+    if form.CustomerName.data:
+        customers = Customer.query.filter(Customer.CustomerName == form.CustomerName.data).all()
         customerids = [x.CustomerID for x in customers]
         if prepare is None:
             prepare = Tickets.query.filter(Tickets.CustomerID.in_(customerids))
@@ -88,15 +103,9 @@ def search_controller():
 def add_record(ticket_id):
     form = EditForm()
     if form.validate_on_submit():
-        print(33333333333)
-        print(ticket_id)
-        print(333333333333)
         elem = Assign.query.filter(Assign.TicketID == ticket_id).first()
         if not elem:
             new = Assign(TicketID=ticket_id, Loads=form.loads.data, Status=form.status.data)
-            assert new.Loads
-            assert new.Status
-            assert new.TicketID
             new.save()
         else:
             elem.Loads = form.loads.data
