@@ -12,7 +12,7 @@ main_blueprint = Blueprint('main', __name__)
 
 
 @main_blueprint.route('/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def index():
 
     form = SearchForm()
@@ -22,7 +22,7 @@ def index():
     return render_template('index.html', new_table=new_table, form=form, form_edit=form_edit, Customer=Customer, Jobs=Jobs, Tickets=Tickets, Trucks=Trucks, Materials=Materials)
 
 @main_blueprint.route('/intransit')
-# @login_required
+@login_required
 def intransit():
 
     page = request.args.get('page', 1, type=int)
@@ -32,6 +32,7 @@ def intransit():
 
 
 @main_blueprint.route('/search', methods=["GET", 'POST'])
+@login_required
 def search_controller():
     if request.method == 'POST':
         form = SearchForm()
@@ -101,6 +102,7 @@ def search_controller():
     return render_template('search.html', new_table=new_table, form=form, Customer=Customer, Jobs=Jobs, Tickets=Tickets, Trucks=Trucks, Materials=Materials)
 
 @main_blueprint.route('/add_record/<int:ticket_id>', methods=['POST'])
+@login_required
 def add_record(ticket_id):
     form = EditForm()
     if form.validate_on_submit():
@@ -117,6 +119,7 @@ def add_record(ticket_id):
     return redirect(url_for("main.index"))
 
 @main_blueprint.route('/edit_index/<int:assign_id>', methods=['POST'])
+@login_required
 def edit_index(assign_id):
     form = EditForm()
     print(1111111111111)

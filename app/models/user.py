@@ -10,31 +10,31 @@ from app.models.utils import ModelMixin
 
 class User(db.Model, UserMixin, ModelMixin):
 
-    __tablename__ = 'users'
+    __tablename__ = 'tUsers'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(60), unique=True, nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
-    activated = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
+    UserID = db.Column(db.String(20), primary_key=True)
+    Password = db.Column(db.String(255), nullable=False)
+
+    def get_id(self):
+        return self.UserID
 
     @hybrid_property
     def password(self):
-        return self.password_hash
-
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
+        return self.Password
 
     @classmethod
-    def authenticate(cls, user_id, password):
-        user = cls.query.filter(db.or_(cls.username == user_id, cls.email == user_id)).first()
-        if user is not None and check_password_hash(user.password, password):
+    def authenticate(cls, UserID, Password):
+        user = cls.query.filter(User.UserID == UserID).first()
+        print(99999999999)
+        print(Password)
+        print(99999999999999)
+        print(user.Password)
+        print(8888888888888)
+        if user is not None and (user.Password == str.encode(Password)):
             return user
 
     def __str__(self):
-        return '<User: %s>' % self.username
+        return '<User: %s>' % self.UserID
 
 
 class AnonymousUser(AnonymousUserMixin):

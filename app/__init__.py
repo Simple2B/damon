@@ -41,7 +41,7 @@ def create_app(environment='development'):
     # Set up flask login.
     @login_manager.user_loader
     def get_user(id):
-        return User.query.get(int(id))
+        return User.query.filter(User.UserID == id).first()
 
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = 'info'
