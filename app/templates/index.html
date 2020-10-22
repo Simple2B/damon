@@ -15,6 +15,40 @@
           {% endif %}
           {% endwith %}
 <!-- class="border-none ddb-cursor-handle" -->
+  <!-- Editindex Modal -->
+  <div class="modal" id="modalEditindex" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <h5 class="--padding">Edit</h5>
+      <div class="modal-body">
+        <form class="form" role="form" action="" method="post" >
+          <div class="__modal-inputs--flex-row">
+            <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
+            <div>
+              {{form_edit.loads.label}}
+              {{form_edit.loads(class='_form-input _form-input--m')}}
+              <!-- <label class="_label">Loads</label> -->
+            </div>
+
+            <div>
+              {{form_edit.status.label}}
+              {{form_edit.status(class='_form-input _form-input--m')}}
+            </div>
+
+            <div>
+              {{ form_edit.submit(class='_btn--gray  ddb-cursor-handle') }}
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- end of Editindex Modal -->
+
+
 <a href="{{ url_for('main.intransit')}}"> In Transit </a>
 <button type="button" data-toggle="modal" data-target="#modalSearch"
 data-target_link=  data-name="{{form}}">Search</button>
@@ -99,6 +133,7 @@ data-target_link=  data-name="{{form}}">Search</button>
    <th>SubcontractorName</th>
    <th>Loads</th>
    <th>Status</th>
+   <th>Edit</th>
   </tr>
   {% for new_table_item in new_table.items %}
   <tr>
@@ -112,6 +147,9 @@ data-target_link=  data-name="{{form}}">Search</button>
     <td>{{ Tickets.query.get(new_table_item.TicketID).SubcontractorName }}</td>
     <td>{{ new_table_item.Loads }}</td>
     <td>{{ new_table_item.Status }}</td>
+    <td><button type="button" data-toggle="modal" data-target="#modalEditindex"
+        data-target-link="{{url_for('main.edit_index', assign_id=new_table_item.assignID)}}">Edit</button></td>
+  </tr>
   </tr>
   {% endfor %}
  </table>
