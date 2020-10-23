@@ -18,7 +18,7 @@ def index():
     form = SearchForm()
     form_edit = EditForm()
     page = request.args.get('page', 1, type=int)
-    new_table = Assign.query.order_by(Assign.assignID.desc()).paginate(page=page, per_page=15)
+    new_table = Assign.query.order_by(Assign.assignID).paginate(page=page, per_page=15)
     return render_template('index.html', new_table=new_table, form=form, form_edit=form_edit, Customer=Customer, Jobs=Jobs, Tickets=Tickets, Trucks=Trucks, Materials=Materials)
 
 @main_blueprint.route('/intransit')
