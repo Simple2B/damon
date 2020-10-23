@@ -108,12 +108,13 @@ data-target_link=  data-name="{{form}}">Add Assignment</button>
 
 
 <table border=1 frame=hsides rules=rows,columns style="border:1px solid black;margin-left:auto;margin-right:auto;">
-  <h2 style="text-align: center;">Assigns</h2>
+  <h2 style="text-align: center;">Assignments</h2>
   <tr>
    <th>CustomerName</th>
    <th>JobName</th>
    <th>MapscoLocation</th>
    <th>JobNumber</th>
+   <th>JobStatus</th>
    <th>MaterialName</th>
    <th>LoadOutNum</th>
    <th>TruckNumber</th>
@@ -128,6 +129,7 @@ data-target_link=  data-name="{{form}}">Add Assignment</button>
     <td>{{ Jobs.query.get(Tickets.query.get(new_table_item.TicketID).JobID).JobName }}</td>
     <td>{{ Tickets.query.get(new_table_item.TicketID).MapscoLocation }}</td>
     <td>{{ Tickets.query.get(new_table_item.TicketID).JobNumber }}</td>
+    <td>{{ Jobs.query.get(Tickets.query.get(new_table_item.TicketID).JobID).JobStatus }}</td>
     <td>{{ Materials.query.get(Tickets.query.get(new_table_item.TicketID).MaterialID).MaterialName }}</td>
     <td>{{ Tickets.query.get(new_table_item.TicketID).LoadOutNum }}</td>
     <td>{{ Trucks.query.get(Tickets.query.get(new_table_item.TicketID).TruckID).TruckNumber }}</td>
