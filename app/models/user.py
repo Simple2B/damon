@@ -13,7 +13,11 @@ class User(db.Model, UserMixin, ModelMixin):
     __tablename__ = 'tUsers'
 
     UserID = db.Column(db.String(20), primary_key=True)
-    Password = db.Column(db.String(255), nullable=False)
+    FirstName = db.Column(db.String(25), nullable=False)
+    LastName = db.Column(db.String(35), nullable=False)
+    Initials = db.Column(db.String(5), nullable=False)
+    Email = db.Column(db.String(100), nullable=False)
+    Password = db.Column(db.String(50), nullable=False)
 
     def get_id(self):
         return self.UserID
