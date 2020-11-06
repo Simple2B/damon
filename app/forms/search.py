@@ -15,7 +15,7 @@ class SearchForm(FlaskForm):
     CustomerName = StringField('CustomerName')
     JobName = StringField('JobName')
     MapscoLocation = StringField('MapscoLocation')
-    JobNumber = IntegerField('JobNumber')
+    JobNumber = StringField('JobNumber')
     MaterialName = StringField('MaterialName')
     LoadOutNum = IntegerField('LoadOutNum')
 #     Loads = IntegerField('Loads')
