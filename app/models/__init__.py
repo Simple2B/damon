@@ -1,7 +1,7 @@
-from .user import User, AnonymousUser
+from .user import User, AnonymousUser  # noqa f401
 from .assign import Assign  # noqa f401
-from .trucks import Trucks
-from .customer import Customer
-from .materials import Materials
-from .tickets import Tickets
-from .jobs import Jobs
+from .trucks import Trucks  # noqa f401
+from .customer import Customer  # noqa f401
+from .materials import Materials  # noqa f401
+from .tickets import Tickets  # noqa f401
+from .jobs import Jobs  # noqa f401

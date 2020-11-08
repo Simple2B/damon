@@ -1,0 +1,6 @@
+{
+    "cSpell.words": [
+        "wtforms"
+    ],
+    "python.formatting.provider": "black"
+}
