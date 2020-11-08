@@ -99,6 +99,8 @@ def search_controller():
     if prepare:
         new_table = prepare.order_by(Tickets.TicketID.desc()).paginate(page=page, per_page=15)
     form = EditForm()
+    if not new_table:
+        return redirect(url_for("main.index"))
     return render_template('search.html', new_table=new_table, form=form, Customer=Customer, Jobs=Jobs, Tickets=Tickets, Trucks=Trucks, Materials=Materials)
 
 @main_blueprint.route('/add_record/<int:ticket_id>', methods=['POST'])
@@ -118,18 +120,27 @@ def add_record(ticket_id):
         flash('Wrong data', 'danger')
     return redirect(url_for("main.index"))
 
+
 @main_blueprint.route('/edit_index/<int:assign_id>', methods=['POST'])
 @login_required
 def edit_index(assign_id):
     form = EditForm()
-    print(1111111111111)
-    print(assign_id)
-    print(1111111111111)
     if form.validate_on_submit():
         elem = Assign.query.get(assign_id)
         elem.Loads = form.loads.data
         elem.Status = form.status.data
         elem.save()
+    else:
+        flash('Wrong data', 'danger')
+    return redirect(url_for("main.index"))
+
+
+@main_blueprint.route('/delete_index/<int:assign_id>', methods=['POST', 'GET'])
+@login_required
+def delete_index(assign_id):
+    elem = Assign.query.get(assign_id)
+    if elem:
+        elem.delete()
     else:
         flash('Wrong data', 'danger')
     return redirect(url_for("main.index"))
