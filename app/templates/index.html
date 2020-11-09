@@ -2,14 +2,20 @@
 
 {% block content %}
 <!-- class="border-none ddb-cursor-handle" -->
-  <!-- Editindex Modal -->
-  <div class="modal" id="modalEditindex" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+<!-- Editindex Modal -->
+<div class="modal fade" id="modalEditindex" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
   aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <h5 class="--padding">Edit</h5>
+      <div class="modal-header">
+        <h5 class="modal-title">Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
       <div class="modal-body">
-        <form class="form" role="form" action="" method="post" >
+        <form class="form" role="form" action="" method="post">
           <div class="__modal-inputs--flex-row">
             <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
             <div>
@@ -24,7 +30,8 @@
             </div>
 
             <div>
-              {{ form_edit.submit(class='_btn--gray  ddb-cursor-handle') }}
+              {{ form_edit.submit(class='btn btn-primary ddb-cursor-handle') }}
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
 
           </div>
@@ -32,68 +39,97 @@
       </div>
     </div>
   </div>
-  </div>
-  <!-- end of Editindex Modal -->
+</div>
+<!-- end of Editindex Modal -->
 
-
-<a href="{{ url_for('main.intransit')}}"> In Transit </a>
-<button type="button" data-toggle="modal" data-target="#modalSearch"
-data-target_link=  data-name="{{form}}">Add Assignment</button>
-<!-- Edit Modal -->
-<div class="modal" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+<!-- Delete Modal -->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="ModalLabelDelete"
   aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <h5 class="--padding">Search</h5>
+      <div class="modal-header">
+        <h5 class="modal-title">Delete row</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form" role="form" action="" method="post">
+        <div class="modal-body">
+          <p>Are you sure?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- end of Delete Modal -->
+
+
+<button onclick="window.location.href='{{ url_for("main.intransit")}}';">
+  In Transit
+</button>
+<button type="button" data-toggle="modal" data-target="#modalSearch" data-target_link=data-name="{{form}}">Add
+  Assignment</button>
+<!-- Edit Modal -->
+<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Search</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="modal-body">
-        <form class="form" role="form" action="{{url_for('main.search_controller')}}" method="post" >
+        <form class="form" role="form" action="{{url_for('main.search_controller')}}" method="post">
           <div class="__modal-inputs--flex-row">
 
-            <div>
-              {{form.CustomerName(class='_form-input _form-input--m')}}
-              <label class="_label">CustomerName</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">CustomerName:</label>
+              {{form.CustomerName(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form.JobName(class='_form-input _form-input--m')}}
-              <label class="_label">JobName</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">JobName:</label>
+              {{form.JobName(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form.MapscoLocation(class='_form-input _form-input--m')}}
-              <label class="_label">MapscoLocation</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">MapscoLocation:</label>
+              {{form.MapscoLocation(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form.JobNumber(class='_form-input _form-input--m')}}
-              <label class="_label">JobNumber</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">JobNumber:</label>
+              {{form.JobNumber(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form.MaterialName(class='_form-input _form-input--m')}}
-              <label class="_label">MaterialName</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">MaterialName:</label>
+              {{form.MaterialName(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form.LoadOutNum(class='_form-input _form-input--m')}}
-              <label class="_label">LoadOutNum</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">LoadOutNum:</label>
+              {{form.LoadOutNum(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-
-
-            <div>
-              {{form.TruckNumber(class='_form-input _form-input--m')}}
-              <label class="_label">TruckNumber</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">TruckNumber:</label>
+              {{form.TruckNumber(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form.SubcontractorName(class='_form-input _form-input--m')}}
-              <label class="_label">SubcontractorName</label>
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">SubcontractorName:</label>
+              {{form.SubcontractorName(class='_form-input _form-input--m col-sm-6')}}
             </div>
-
 
             <div class="">
-              {{ form.submit(class='_btn--gray  ddb-cursor-handle') }}
+              {{ form.submit(class='btn btn-primary ddb-cursor-handle') }}
             </div>
 
           </div>
@@ -110,18 +146,19 @@ data-target_link=  data-name="{{form}}">Add Assignment</button>
 <table border=1 frame=hsides rules=rows,columns style="border:1px solid black;margin-left:auto;margin-right:auto;">
   <h2 style="text-align: center;">Assignments</h2>
   <tr>
-   <th>CustomerName</th>
-   <th>JobName</th>
-   <th>MapscoLocation</th>
-   <th>JobNumber</th>
-   <th>JobStatus</th>
-   <th>MaterialName</th>
-   <th>LoadOutNum</th>
-   <th>TruckNumber</th>
-   <th>SubcontractorName</th>
-   <th>Loads</th>
-   <th>Status</th>
-   <th>Edit</th>
+    <th>CustomerName</th>
+    <th>JobName</th>
+    <th>MapscoLocation</th>
+    <th>JobNumber</th>
+    <th>JobStatus</th>
+    <th>MaterialName</th>
+    <th>LoadOutNum</th>
+    <th>TruckNumber</th>
+    <th>SubcontractorName</th>
+    <th>Loads</th>
+    <th>Status</th>
+    <th>Edit</th>
+    <th>&times;</th>
   </tr>
   {% for new_table_item in new_table.items %}
   <tr>
@@ -137,18 +174,25 @@ data-target_link=  data-name="{{form}}">Add Assignment</button>
     <td>{{ new_table_item.Loads }}</td>
     <td>{{ new_table_item.Status }}</td>
     <td><button type="button" data-toggle="modal" data-target="#modalEditindex"
-        data-target-link="{{url_for('main.edit_index', assign_id=new_table_item.assignID)}}">Edit</button></td>
+        data-target-link="{{url_for('main.edit_index', assign_id=new_table_item.assignID)}}">Edit</button>
+    </td>
+    <td>
+      <button type="button" data-toggle="modal" data-target="#modalDelete"
+        data-target-link="{{url_for('main.delete_index', assign_id=new_table_item.assignID)}}">
+        <img src="{{ url_for('static', filename='image/delete_element.svg') }}">
+      </button>
+    </td>
   </tr>
   </tr>
   {% endfor %}
- </table>
- <div style="margin: 0 auto;">
+</table>
+<div style="margin: 0 auto;">
   {% for page_num in new_table.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
   {% if page_num %}
   {% if new_table.page == page_num %}
-    <a class="btn btn-info mb-4" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+  <a class="btn btn-info mb-4" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
   {% else %}
-    <a class="btn btn-outline-info mb-4" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+  <a class="btn btn-outline-info mb-4" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
   {% endif %}
   {% else %}
   ...

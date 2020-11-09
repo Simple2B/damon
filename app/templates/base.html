@@ -32,12 +32,8 @@
           <!-- Login/Logout -->
           <ul class="navbar-nav ml-auto">
             {% if current_user.is_authenticated %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="userActions" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">{{current_user.user_id | capitalize}}</a>
-              <div class="dropdown-menu" aria-labelledby="userActions">
-                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
-              </div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
@@ -69,7 +65,7 @@
   <footer>
       <!-- Copyrights -->
       <div class="text-center">
-        <p class="text-muted mb-0 py-2">&copy;2020 {{ config.APP_NAME }} | All rights reserved.</p>
+        <p class="text-muted mb-0 py-2">&copy;2020 {{ config.APP_NAME }} | <a href="https://simple2b.com">Simple2B</a> | All rights reserved.</p>
       </div>
     </div>
   </footer>
