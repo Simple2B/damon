@@ -1,10 +1,19 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, IntegerField, SelectField
+from wtforms import SubmitField, IntegerField, SelectField, StringField
 
 
 class EditForm(FlaskForm):
-    loads = IntegerField('Loads')
-    status = SelectField('Status', choices=[
+
+
+    CustomerName = StringField('CustomerName')
+    JobName = StringField('JobName')
+    MapscoLocation = StringField('MapscoLocation')
+    Source = StringField('Source')
+    JobNumber = StringField('JobNumber')
+    MaterialName = StringField('MaterialName')
+    LoadTotal = IntegerField('LoadTotal')
+    LoadDispatchTotal = IntegerField('LoadDispatchTotal')
+    Status = SelectField('Status', choices=[
         ('InTransit', 'InTransit'),
         ('Delivered', 'Delivered'),
         ('Cancelled', 'Cancelled')

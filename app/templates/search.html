@@ -41,25 +41,25 @@
    <th>CustomerName</th>
    <th>JobName</th>
    <th>MapscoLocation</th>
+   <th>Source</th>
    <th>JobNumber</th>
    <th>MaterialName</th>
-   <th>LoadOutNum</th>
-   <th>TruckNumber</th>
-   <th>SubcontractorName</th>
+   <th>LoadTotal</th>
+   <th>LoadDispatchTotal</th>
    <th>Edit</th>
   </tr>
-  {% for new_table_item in new_table.items %}
+  {% for new_table_item in reversed(new_table.items) %}
   <tr>
     <td>{{ Customer.query.get(Tickets.query.get(new_table_item.TicketID).CustomerID).CustomerName }}</td>
     <td>{{ Jobs.query.get(Tickets.query.get(new_table_item.TicketID).JobID).JobName }}</td>
     <td>{{ Tickets.query.get(new_table_item.TicketID).MapscoLocation }}</td>
+    <td>Source</td>
     <td>{{ Tickets.query.get(new_table_item.TicketID).JobNumber }}</td>
     <td>{{ Materials.query.get(Tickets.query.get(new_table_item.TicketID).MaterialID).MaterialName }}</td>
-    <td>{{ Tickets.query.get(new_table_item.TicketID).LoadOutNum }}</td>
-    <td>{{ Trucks.query.get(Tickets.query.get(new_table_item.TicketID).TruckID).TruckNumber }}</td>
-    <td>{{ Tickets.query.get(new_table_item.TicketID).SubcontractorName }}</td>
+    <td>LoadTotal</td>
+    <td>LoadDispatchTotal</td>
     <td><button type="button" data-toggle="modal" data-target="#modalEdit"
-        data-target-link="{{url_for('main.add_record', ticket_id=new_table_item.TicketID)}}">Edit</button></td>
+        data-target-link="{{url_for('main.add_order', ticket_id=new_table_item.TicketID)}}">Edit</button></td>
   </tr>
   {% endfor %}
  </table>

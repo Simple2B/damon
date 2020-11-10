@@ -8,7 +8,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Edit</h5>
+        <h5 class="modal-title">Add Order</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -19,19 +19,47 @@
           <div class="__modal-inputs--flex-row">
             <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
             <div>
-              {{form_edit.loads.label}}
-              {{form_edit.loads(class='_form-input _form-input--m')}}
-              <!-- <label class="_label">Loads</label> -->
+              {{form.CustomerName.label}}
+              {{form.CustomerName(class='_form-input _form-input--m')}}
             </div>
 
             <div>
-              {{form_edit.status.label}}
-              {{form_edit.status(class='_form-input _form-input--m')}}
+              {{form.JobName.label}}
+              {{form.JobName(class='_form-input _form-input--m')}}
             </div>
 
             <div>
-              {{ form_edit.submit(class='btn btn-primary ddb-cursor-handle') }}
+              {{form.MapscoLocation.label}}
+              {{form.MapscoLocation(class='_form-input _form-input--m')}}
+            </div>
+
+            <div>
+              {{form.Source.label}}
+              {{form.Source(class='_form-input _form-input--m')}}
+            </div>
+
+            <div>
+              {{form.JobNumber.label}}
+              {{form.JobNumber}}
+            </div>
+
+            <div>
+              {{form.MaterialName.label}}
+              {{form.MaterialName(class='_form-input _form-input--m')}}
+            </div>
+
+            <div>
+              {{form.LoadTotal.label}}
+              {{form.LoadTotal(class='_form-input _form-input--m')}}
+            </div>
+
+
+
+            <div>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">LookUp</button>
+              {{ form.submit(class='btn btn-primary ddb-cursor-handle') }}
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              
             </div>
 
           </div>
@@ -41,6 +69,47 @@
   </div>
 </div>
 <!-- end of Editindex Modal -->
+
+
+<!-- Assign Modal -->
+<div class="modal fade" id="modalAssign" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Assign</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form class="form" role="form" action="" method="post">
+          <div class="__modal-inputs--flex-row">
+            <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
+            <div>
+              {{form_assign.TruckNumber.label}}
+              {{form_assign.TruckNumber(class='_form-input _form-input--m')}}
+              <!-- <label class="_label">Loads</label> -->
+            </div>
+
+            <div>
+              {{form_assign.LoadsDispatched.label}}
+              {{form_assign.LoadsDispatched(class='_form-input _form-input--m')}}
+            </div>
+
+            <div>
+              {{ form_assign.submit(class='btn btn-primary ddb-cursor-handle') }}
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of Assign Modal -->
 
 <!-- Delete Modal -->
 <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="ModalLabelDelete"
@@ -71,65 +140,70 @@
 <button onclick="window.location.href='{{ url_for("main.intransit")}}';">
   In Transit
 </button>
-<button type="button" data-toggle="modal" data-target="#modalSearch" data-target_link=data-name="{{form}}">Add
-  Assignment</button>
+<button type="button" data-toggle="modal" data-target="#modalEditindex" data-target_link= data-name="{{form}}">Add
+  Order</button>
 <!-- Edit Modal -->
 <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Search</h5>
+        <h5 class="modal-title">New Order</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form class="form" role="form" action="{{url_for('main.search_controller')}}" method="post">
+        <form class="form" role="form" action="" method="post">
           <div class="__modal-inputs--flex-row">
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">CustomerName:</label>
-              {{form.CustomerName(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.CustomerName(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">JobName:</label>
-              {{form.JobName(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.JobName(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">MapscoLocation:</label>
-              {{form.MapscoLocation(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.MapscoLocation(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
+
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">Source</label>
+              {{form_edit.Source(class='_form-input _form-input--m col-sm-6')}}
+            </div>
+
+            
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">JobNumber:</label>
-              {{form.JobNumber(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.JobNumber(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">MaterialName:</label>
-              {{form.MaterialName(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.MaterialName(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
-              <label class="col-sm-5 col-form-label">LoadOutNum:</label>
-              {{form.LoadOutNum(class='_form-input _form-input--m col-sm-6')}}
+              <label class="col-sm-5 col-form-label">Load Total</label>
+              {{form_edit.LoadTotal(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div class="form-group row">
-              <label class="col-sm-5 col-form-label">TruckNumber:</label>
-              {{form.TruckNumber(class='_form-input _form-input--m col-sm-6')}}
+
+            <div>
+              {{form_edit.LoadDispatchTotal.label}}
+              {{form_edit.LoadDispatchTotal(class='_form-input _form-input--m')}}
+              <!-- <label class="_label">Loads</label> -->
             </div>
 
-            <div class="form-group row">
-              <label class="col-sm-5 col-form-label">SubcontractorName:</label>
-              {{form.SubcontractorName(class='_form-input _form-input--m col-sm-6')}}
-            </div>
 
             <div class="">
-              {{ form.submit(class='btn btn-primary ddb-cursor-handle') }}
+              {{ form_edit.submit(class='btn btn-primary ddb-cursor-handle') }}
             </div>
 
           </div>
@@ -142,43 +216,42 @@
 
 
 
-
 <table border=1 frame=hsides rules=rows,columns style="border:1px solid black;margin-left:auto;margin-right:auto;">
-  <h2 style="text-align: center;">Assignments</h2>
+  <h2 style="text-align: center;">Orders</h2>
   <tr>
     <th>CustomerName</th>
     <th>JobName</th>
     <th>MapscoLocation</th>
+    <th>Source</th>
     <th>JobNumber</th>
-    <th>JobStatus</th>
     <th>MaterialName</th>
-    <th>LoadOutNum</th>
-    <th>TruckNumber</th>
-    <th>SubcontractorName</th>
-    <th>Loads</th>
+    <th>LoadTotal</th>
+    <th>LoadDispatchTotal</th>
     <th>Status</th>
     <th>Edit</th>
+    <th>Assign</th>
     <th>&times;</th>
   </tr>
-  {% for new_table_item in new_table.items %}
+  {% for new_table_item in reversed(new_table.items) %}
   <tr>
-    <td>{{ Customer.query.get(Tickets.query.get(new_table_item.TicketID).CustomerID).CustomerName }}</td>
-    <td>{{ Jobs.query.get(Tickets.query.get(new_table_item.TicketID).JobID).JobName }}</td>
-    <td>{{ Tickets.query.get(new_table_item.TicketID).MapscoLocation }}</td>
-    <td>{{ Tickets.query.get(new_table_item.TicketID).JobNumber }}</td>
-    <td>{{ Jobs.query.get(Tickets.query.get(new_table_item.TicketID).JobID).JobStatus }}</td>
-    <td>{{ Materials.query.get(Tickets.query.get(new_table_item.TicketID).MaterialID).MaterialName }}</td>
-    <td>{{ Tickets.query.get(new_table_item.TicketID).LoadOutNum }}</td>
-    <td>{{ Trucks.query.get(Tickets.query.get(new_table_item.TicketID).TruckID).TruckNumber }}</td>
-    <td>{{ Tickets.query.get(new_table_item.TicketID).SubcontractorName }}</td>
+    <td>{{ new_table_item.SubcontractorName }}</td>
+    <td>{{ new_table_item.JobName }}</td>
+    <td>{{ new_table_item.MapscoLocation }}</td>
+    <td>{{ new_table_item.JobNumber }}</td>
+    <td>{{ new_table_item.MaterialName }}</td>
+    <td>{{ new_table_item.TruckNumber }}</td>
+    <td>{{ new_table_item.SubcontractorName }}</td>
     <td>{{ new_table_item.Loads }}</td>
     <td>{{ new_table_item.Status }}</td>
-    <td><button type="button" data-toggle="modal" data-target="#modalEditindex"
-        data-target-link="{{url_for('main.edit_index', assign_id=new_table_item.assignID)}}">Edit</button>
+    <td><button type="button" data-toggle="modal" data-target="#modalEdit"
+        data-target-link="{{url_for('main.edit_order', order_id=new_table_item.orderID)}}">Edit</button>
+    </td>
+    <td><button type="button" data-toggle="modal" data-target="#modalAssignindex"
+        data-target-link="{{url_for('main.add_assign', order_id=new_table_item.orderID)}}">Assign</button>
     </td>
     <td>
       <button type="button" data-toggle="modal" data-target="#modalDelete"
-        data-target-link="{{url_for('main.delete_index', assign_id=new_table_item.assignID)}}">
+        data-target-link="{{url_for('main.delete_index', order_id=new_table_item.orderID)}}">
         <img src="{{ url_for('static', filename='image/delete_element.svg') }}">
       </button>
     </td>
