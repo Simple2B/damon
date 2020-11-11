@@ -9,7 +9,7 @@
         {{form.CustomerName.label(class="col-sm-3 col-form-label")}}
         {{form.CustomerName(class='_form-input _form-input--m col-sm-4')}}
       </div>
-
+      
       <div class="row justify-content-center">
         {{form.JobName.label(class="col-sm-3 col-form-label")}}
         {{form.JobName(class='_form-input _form-input--m col-sm-4')}}
@@ -21,8 +21,24 @@
       </div>
 
       <div class="row justify-content-center">
-        {{form.JobNumber.label(class="col-sm-3 col-form-label")}}
-        {{form.JobNumber(class="selectpicker col-sm-3 _form-input _form-input--m", data_live_search="true")}}
+        <select id="filter"  style="width:30%; text-align:center;">
+          <option data-targets="">Choose how to enter JobNumber</option>
+          <option data-targets="t1">Manually</option>
+          <option data-targets="t2">Select from dropdown list</option>
+        </select>
+      </div>
+      
+
+      <div class="target hidden" id="t1">
+        {{form.JobNumberString.label(class="col-sm-3 col-form-label")}}
+        {{form.JobNumberString(class='_form-input _form-input--m col-sm-4')}}
+        {{ form.lookup(class='btn btn-primary col-sm-0 ml-1') }}
+
+      </div>
+      
+      <div class="target hidden" id="t2">
+        {{form.JobNumberSelect.label(class="col-sm-3 col-form-label")}}
+        {{form.JobNumberSelect(class="selectpicker col-sm-3 _form-input _form-input--m", data_live_search="true")}}
         {{ form.lookup(class='btn btn-primary col-sm-0 ml-1') }}
       </div>
 

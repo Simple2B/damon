@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField
+from wtforms import StringField, SubmitField, IntegerField, SelectField
 
 
 class AssignForm(FlaskForm):
-    TruckNumber = StringField('TruckNumber')
+    TruckNumberString = StringField('TruckNumber')
+    TruckNumberSelect = SelectField('TruckNumber')
     LoadsDispatched = IntegerField('LoadsDispatched')
     submit = SubmitField('Assign')

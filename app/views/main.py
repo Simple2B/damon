@@ -3,7 +3,7 @@ from flask_login import login_required
 
 
 from app import db
-from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch
+from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch, Trucks
 from app.forms import OrderForm, EditForm, AssignForm
 
 
@@ -16,6 +16,10 @@ def index():
     if request.method == 'GET':
         form_edit = EditForm()
         form_assign = AssignForm()
+        truck_numbers = truck_nums()
+        choices = [(number, number) for number in truck_numbers]
+        choices.insert(0, ('', ''))
+        form_assign.TruckNumberSelect.choices = choices
         page = request.args.get("page", 1, type=int)
         new_table = Order.query.order_by(Order.orderID.desc()).paginate(
             page=page, per_page=15
@@ -41,7 +45,9 @@ def new_order():
     if request.method == 'GET':
         job_numbers = job_nums()
         form = OrderForm()
-        form.JobNumber.choices = [(number, number) for number in job_numbers]
+        choices = [(number, number) for number in job_numbers]
+        choices.insert(0, ('', ''))
+        form.JobNumberSelect.choices = choices
         return render_template(
             "new_order.html",
             form=form,
@@ -49,9 +55,14 @@ def new_order():
     elif request.method == 'POST':
         form = OrderForm()
         if form.lookup.data and (not form.submit.data):
-            if form.JobNumber.data:
+            job_number_data = ''
+            if form.JobNumberSelect.data != '':
+                job_number_data = form.JobNumberSelect.data
+            else:
+                job_number_data = form.JobNumberString.data
+            if job_number_data != '':
                 job_numbers = job_nums()
-                job_number = form.JobNumber.data
+                job_number = job_number_data
                 # TODO: TAKE FIRST
                 # prepare = Tickets.query.filter(Tickets.JobNumber == job_number).all()
                 prepare = Tickets.query.filter(Tickets.JobNumber == job_number).first()
@@ -61,10 +72,13 @@ def new_order():
                     form.CustomerName.data = Customer.query.get(prepare.CustomerID).CustomerName
                     form.JobName.data = Jobs.query.get(prepare.JobID).JobName
                     form.MapscoLocation.data = prepare.MapscoLocation
-                    form.JobNumber.data = job_number
+                    form.JobNumberSelect.data = job_number
+                    form.JobNumberString.data = job_number
                     form.MaterialName.data = Materials.query.get(prepare.MaterialID).MaterialName
 
-                form.JobNumber.choices = [(number, number) for number in job_numbers]
+                choices = [(number, number) for number in job_numbers]
+                choices.insert(0, ('', ''))
+                form.JobNumberSelect.choices = choices
             return render_template(
                 "new_order.html",
                 form=form,
@@ -98,14 +112,24 @@ def job_nums():
     return [j[0] for j in all_job_numbers]
 
 
+def truck_nums():
+    all_truck_numbers = db.session.query(Trucks.TruckNumber).distinct().order_by(Trucks.TruckNumber).all()
+    return [j[0] for j in all_truck_numbers]
+
+
 @main_blueprint.route("/add_assign/<int:order_id>", methods=["POST"])
 @login_required
 def add_assign(order_id):
     form = AssignForm()
     if form.validate_on_submit():
+        truck_number = ''
+        if form.TruckNumberSelect.data != '':
+            truck_number = form.TruckNumberSelect.data
+        else:
+            truck_number = form.TruckNumberString.data
         new = Dispatch(
             orderID=order_id,
-            TruckNumber=form.TruckNumber.data,
+            TruckNumber=truck_number,
             LoadsDispatched=form.LoadsDispatched.data
         )
         new.save()

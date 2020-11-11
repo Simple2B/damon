@@ -1,6 +1,19 @@
 // custom javascript
 
-$(document).ready(function() {
+$(document).ready(function() {    
+    var filter = document.getElementById('filter');
+
+    filter.addEventListener('change', function() {
+      var option = this.options[this.selectedIndex];
+      var targets = option.dataset.targets.split(/(\s+)/);
+      for (var target of document.getElementsByClassName('target')) {
+        if (targets.indexOf(target.id) >= 0)
+          target.classList.remove('hidden');
+        else
+          target.classList.add('hidden');
+      }
+    });
+
     $('#modalEdit').on('show.bs.modal', function (event) {
       const button = $(event.relatedTarget); // Button that triggered the modal
       const target_link = button.data('target-link');
