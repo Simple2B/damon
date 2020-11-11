@@ -86,12 +86,17 @@ def new_order():
         if form.submit.data:
             form.lookup.data = True
             if form.validate_on_submit:
+                job_number_data = ''
+                if form.JobNumberSelect.data != '':
+                    job_number_data = form.JobNumberSelect.data
+                else:
+                    job_number_data = form.JobNumberString.data
                 new = Order(
                     CustomerName=form.CustomerName.data,
                     JobName=form.JobName.data,
                     MapscoLocation=form.MapscoLocation.data,
                     Source=form.Source.data,
-                    JobNumber=form.JobNumber.data,
+                    JobNumber=job_number_data,
                     MaterialName=form.MaterialName.data,
                     LoadTotal=form.LoadTotal.data,
                 )
@@ -121,7 +126,7 @@ def truck_nums():
 @login_required
 def add_assign(order_id):
     form = AssignForm()
-    if form.validate_on_submit():
+    if form.submit.data and ((form.TruckNumberString.data != '') or (form.TruckNumberSelect.data != '')):
         truck_number = ''
         if form.TruckNumberSelect.data != '':
             truck_number = form.TruckNumberSelect.data
