@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- class="border-none ddb-cursor-handle" -->
 <!-- Editindex Modal -->
 
 <!-- end of Editindex Modal -->
@@ -85,7 +84,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">New Order</h5>
+        <h5 class="modal-title">Edit Order</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -96,53 +95,46 @@
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">CustomerName:</label>
-              {{form_edit.CustomerName(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.CustomerName(id="edit_CustomerName", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">JobName:</label>
-              {{form_edit.JobName(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.JobName(id="edit_JobName", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">MapscoLocation:</label>
-              {{form_edit.MapscoLocation(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.MapscoLocation(id="edit_MapscoLocation", class='_form-input _form-input--m col-sm-6')}}
             </div>
-
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">Source:</label>
-              {{form_edit.Source(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.Source(id="edit_Source", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">JobNumber:</label>
-              {{form_edit.JobNumber(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.JobNumber(id="edit_JobNumber", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">MaterialName:</label>
-              {{form_edit.MaterialName(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.MaterialName(id="edit_MaterialName", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">Load Total:</label>
-              {{form_edit.LoadTotal(class='_form-input _form-input--m col-sm-6')}}
+              {{form_edit.LoadTotal(id="edit_LoadTotal", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form_edit.LoadDispatchTotal.label}}
-              {{form_edit.LoadDispatchTotal(class='_form-input _form-input--m')}}
+            <div class="form-group row">
+              {{form_edit.Status.label(class="col-sm-5 col-form-label")}}
+              {{form_edit.Status(class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div>
-              {{form_edit.Status.label}}
-              {{form_edit.Status(class='_form-input _form-input--m')}}
-            </div>
-
-
-            <div class="">
-              {{ form_edit.submit(class='btn btn-primary ddb-cursor-handle') }}
+            <div class="row justify-content-center">
+              {{ form_edit.submit(class='btn btn-primary col-sm-6') }}
             </div>
 
           </div>
@@ -183,6 +175,13 @@
     <td>{{ LoadsDispatched_function(new_table_item)  }}</td>
     <td>{{ new_table_item.Status }}</td>
     <td><button type="button" data-toggle="modal" data-target="#modalEdit"
+        data-customername="{{new_table_item.CustomerName}}"
+        data-jobname="{{new_table_item.JobName}}"
+        data-mapscolocation="{{new_table_item.MapscoLocation}}"
+        data-source="{{new_table_item.Source}}"
+        data-jobnumber="{{new_table_item.JobNumber}}"
+        data-materialname="{{new_table_item.MaterialName}}"
+        data-loadtotal="{{new_table_item.LoadTotal}}"
         data-target-link="{{url_for('main.edit_order', order_id=new_table_item.orderID)}}">Edit</button>
     </td>
     <td><button type="button" data-toggle="modal" data-target="#modalAssign"
