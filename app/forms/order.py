@@ -16,7 +16,7 @@ class OrderForm(FlaskForm):
     CustomerName = StringField('CustomerName')
     JobName = StringField('JobName')
     MapscoLocation = StringField('MapscoLocation')
-    JobNumber = SelectField('JobNumber', coerce=int)
+    JobNumber = SelectField('JobNumber')
     MaterialName = StringField('MaterialName')
     LoadTotal = IntegerField('LoadTotal')
     Source = StringField('Source')

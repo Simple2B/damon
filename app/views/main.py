@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, request, redirect, flash, url_for
 from flask_login import login_required
 
 
+from app import db
 from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch
 from app.forms import OrderForm, EditForm, AssignForm
 
@@ -39,10 +40,8 @@ def LoadsDispatched_function(new_table_item):
 def new_order():
     if request.method == 'GET':
         job_numbers = job_nums()
-        for i in range(len(job_numbers)):
-            job_numbers[i] = (i, job_numbers[i].JobNumber)
         form = OrderForm()
-        form.JobNumber.choices = job_numbers
+        form.JobNumber.choices = [(number, number) for number in job_numbers]
         return render_template(
             "new_order.html",
             form=form,
@@ -50,26 +49,22 @@ def new_order():
     elif request.method == 'POST':
         form = OrderForm()
         if form.lookup.data and (not form.submit.data):
-            if form.JobNumber.data >= 0:
+            if form.JobNumber.data:
                 job_numbers = job_nums()
-                jobnumber_from_form = form.JobNumber.data
-                job_number = job_numbers[jobnumber_from_form].JobNumber
-                prepare = Tickets.query.filter(Tickets.JobNumber == job_number).all()
-                if len(prepare) > 0:
-                    prepare = prepare[0]
+                job_number = form.JobNumber.data
+                # TODO: TAKE FIRST
+                # prepare = Tickets.query.filter(Tickets.JobNumber == job_number).all()
+                prepare = Tickets.query.filter(Tickets.JobNumber == job_number).first()
+
+                if prepare:
                     form = OrderForm()
                     form.CustomerName.data = Customer.query.get(prepare.CustomerID).CustomerName
                     form.JobName.data = Jobs.query.get(prepare.JobID).JobName
                     form.MapscoLocation.data = prepare.MapscoLocation
-                    for i in range(len(job_numbers)):
-                        job_numbers[i] = (i, job_numbers[i].JobNumber)
-                    form.JobNumber.choices = job_numbers
-                    form.JobNumber.data = jobnumber_from_form
+                    form.JobNumber.data = job_number
                     form.MaterialName.data = Materials.query.get(prepare.MaterialID).MaterialName
-                else:
-                    for i in range(len(job_numbers)):
-                        job_numbers[i] = (i, job_numbers[i].JobNumber)
-                    form.JobNumber.choices = job_numbers
+
+                form.JobNumber.choices = [(number, number) for number in job_numbers]
             return render_template(
                 "new_order.html",
                 form=form,
@@ -93,12 +88,14 @@ def new_order():
 
 
 def job_nums():
-    prepare = Jobs.query.distinct(Jobs.JobNumber).order_by(Jobs.JobNumber).all()
-    res = []
-    for i in prepare:
-        if Tickets.query.filter(Tickets.JobID == i.JobID).first():
-            res.append(i)
-    return res
+    # prepare = Jobs.query.distinct(Jobs.JobNumber).order_by(Jobs.JobNumber).all()
+    # res = []
+    # for i in prepare:
+    #     if Tickets.query.filter(Tickets.JobID == i.JobID).first():
+    #         res.append(i)
+    # return res
+    all_job_numbers = db.session.query(Tickets.JobNumber).distinct().order_by(Tickets.JobNumber).all()
+    return [j[0] for j in all_job_numbers]
 
 
 @main_blueprint.route("/add_assign/<int:order_id>", methods=["POST"])

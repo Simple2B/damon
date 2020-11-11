@@ -17,4 +17,4 @@ class EditForm(FlaskForm):
         ('Delivered', 'Delivered'),
         ('Cancelled', 'Cancelled')
         ])
-    submit = SubmitField('Edit')
+    submit = SubmitField('Save')

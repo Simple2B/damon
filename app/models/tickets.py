@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from app import db
 
 
@@ -9,8 +10,9 @@ class Tickets(db.Model):
     SubcontractorName = db.Column(db.String(50))
     TruckID = db.Column(db.Integer)
     CustomerID = db.Column(db.Integer)
-    JobID = db.Column(db.Integer)
+    JobID = db.Column(db.Integer, db.ForeignKey("tJobs.JobID"))
     JobNumber = db.Column(db.String(20))
     MaterialID = db.Column(db.Integer)
     MapscoLocation = db.Column(db.String(20))
     LoadOutNum = db.Column(db.String(15))
+    job = relationship("Jobs")
