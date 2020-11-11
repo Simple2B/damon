@@ -119,11 +119,22 @@
               {{form_edit.Source(id="edit_Source", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
-            <div class="form-group row">
-              <label class="col-sm-5 col-form-label">JobNumber:</label>
-              {{form_edit.JobNumber(id="edit_JobNumber", class='_form-input _form-input--m col-sm-6')}}
+            <div class="row justify-content-center">
+              <select id="filter_edit"  style="width:60%; text-align:center;">
+                <option data-targets="t1">Manually</option>
+                <option data-targets="t2">Select from dropdown list</option>
+              </select>
             </div>
 
+              <div class="target " id="t1">
+                <label class="col-sm-5 col-form-label">JobNumber:</label>
+                {{form_edit.JobNumberString(id="edit_JobNumberString", class='_form-input _form-input--m col-sm-6')}}
+              </div>
+              <div class="target hidden" id="t2">
+                <label class="col-sm-5 col-form-label">JobNumber:</label>
+                {{form_edit.JobNumberSelect(id="edit_JobNumberSelect", class="selectpicker col-sm-3 _form-input _form-input--m", data_live_search="true")}}
+              </div>
+            
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">MaterialName:</label>
               {{form_edit.MaterialName(id="edit_MaterialName", class='_form-input _form-input--m col-sm-6')}}
@@ -140,6 +151,7 @@
             </div>
 
             <div class="row justify-content-center">
+              {{ form_edit.csrf_token }}
               {{ form_edit.submit(class='btn btn-primary col-sm-6') }}
             </div>
 

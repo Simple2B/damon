@@ -8,10 +8,10 @@ class EditForm(FlaskForm):
     JobName = StringField('JobName')
     MapscoLocation = StringField('MapscoLocation')
     Source = StringField('Source')
-    JobNumber = StringField('JobNumber')
+    JobNumberString = StringField('JobNumber')
+    JobNumberSelect = SelectField('JobNumber')
     MaterialName = StringField('MaterialName')
     LoadTotal = IntegerField('LoadTotal')
-    LoadDispatchTotal = IntegerField('LoadDispatchTotal')
     Status = SelectField('Status', choices=[
         ('InTransit', 'InTransit'),
         ('Delivered', 'Delivered'),

@@ -15,6 +15,10 @@ main_blueprint = Blueprint("main", __name__)
 def index():
     if request.method == 'GET':
         form_edit = EditForm()
+        job_numbers = job_nums()
+        choices = [(number, number) for number in job_numbers]
+        choices.insert(0, ('', ''))
+        form_edit.JobNumberSelect.choices = choices
         form_assign = AssignForm()
         truck_numbers = truck_nums()
         choices = [(number, number) for number in truck_numbers]
@@ -142,6 +146,10 @@ def add_assign(order_id):
 @login_required
 def edit_order(order_id):
     form = EditForm()
+    if (form.JobNumberString != '') and (form.JobNumberSelect == ''):
+        form.JobNumberSelect = form.JobNumberString
+    if (form.JobNumberString == '') and (form.JobNumberSelect != ''):
+        form.JobNumberString = form.JobNumberSelect
     if form.validate_on_submit():
         elem = Order.query.get(order_id)
         elem.CustomerName = form.CustomerName.data
