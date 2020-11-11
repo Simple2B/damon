@@ -14,11 +14,6 @@ main_blueprint = Blueprint("main", __name__)
 @login_required
 def index():
     if request.method == 'GET':
-        job_numbers = Jobs.query.distinct().all()
-        for i in range(len(job_numbers)):
-            job_numbers[i] = (i , job_numbers[i].JobNumber)
-        form = OrderForm()
-        form.JobNumber.choices = job_numbers
         form_edit = EditForm()
         form_assign = AssignForm()
         page = request.args.get("page", 1, type=int)
@@ -28,12 +23,135 @@ def index():
         return render_template(
             "index.html",
             new_table=new_table,
-            form=form,
             form_edit=form_edit,
             form_assign=form_assign,
             reversed=reversed,
+            LoadsDispatched_function=LoadsDispatched_function,
         )
 
+
+def LoadsDispatched_function(new_table_item):
+    dispatches = Dispatch.query.filter(Dispatch.orderID == new_table_item.orderID).all()
+    return sum([i.LoadsDispatched for i in dispatches])
+
+
+@main_blueprint.route("/new_order", methods=["GET", "POST"])
+@login_required
+def new_order():
+    if request.method == 'GET':
+        job_numbers = job_nums()
+        for i in range(len(job_numbers)):
+            job_numbers[i] = (i , job_numbers[i].JobNumber)
+        form = OrderForm()
+        form.JobNumber.choices = job_numbers
+        return render_template(
+            "new_order.html",
+            form=form,
+        )
+    elif request.method == 'POST':
+        form = OrderForm()
+        if form.lookup.data and (not form.submit.data):
+            if form.JobNumber.data >= 0:
+                job_numbers = job_nums()
+                jobnumber_from_form = form.JobNumber.data
+                job_number = job_numbers[jobnumber_from_form].JobNumber
+                prepare = Tickets.query.filter(Tickets.JobNumber == job_number).all()
+                if len(prepare) > 0:
+                    prepare = prepare[0]
+                    form = OrderForm()
+                    form.CustomerName.data = Customer.query.get(prepare.CustomerID).CustomerName
+                    form.JobName.data = Jobs.query.get(prepare.JobID).JobName
+                    form.MapscoLocation.data = prepare.MapscoLocation
+                    for i in range(len(job_numbers)):
+                        job_numbers[i] = (i , job_numbers[i].JobNumber)
+                    form.JobNumber.choices = job_numbers
+                    form.JobNumber.data = jobnumber_from_form
+                    form.MaterialName.data = Materials.query.get(prepare.MaterialID).MaterialName
+                else:
+                    for i in range(len(job_numbers)):
+                        job_numbers[i] = (i , job_numbers[i].JobNumber)
+                    form.JobNumber.choices = job_numbers
+            return render_template(
+                "new_order.html",
+                form=form,
+            )
+        if form.submit.data:
+            form.lookup.data = True
+            if form.validate_on_submit:
+                new = Order(
+                    CustomerName=form.CustomerName.data,
+                    JobName=form.JobName.data,
+                    MapscoLocation=form.MapscoLocation.data,
+                    Source=form.Source.data,
+                    JobNumber=form.JobNumber.data,
+                    MaterialName=form.MaterialName.data,
+                    LoadTotal=form.LoadTotal.data,
+                )
+                new.save()   
+                return redirect(url_for("main.index"))
+            else:
+                flash("Wrong data", "danger")
+        
+def job_nums():
+    prepare = Jobs.query.distinct(Jobs.JobNumber).order_by(Jobs.JobNumber).all()
+    res = []
+    for i in prepare:
+        if Tickets.query.filter(Tickets.JobID == i.JobID).first():
+            res.append(i)
+    return res
+
+
+@main_blueprint.route("/add_assign/<int:order_id>", methods=["POST"])
+@login_required
+def add_assign(order_id):
+    form = AssignForm()
+    if form.validate_on_submit():
+        new = Dispatch(
+            orderID=order_id, 
+            TruckNumber=form.TruckNumber.data, 
+            LoadsDispatched=form.LoadsDispatched.data
+        )
+        new.save()
+    else:
+        flash("Wrong data", "danger")
+    return redirect(url_for("main.index"))
+
+
+@main_blueprint.route("/edit_order/<int:order_id>", methods=["POST"])
+@login_required
+def edit_order(order_id):
+    form = EditForm()
+    if form.validate_on_submit():
+        elem = Order.query.get(order_id)
+        elem.CustomerName = form.CustomerName.data
+        elem.JobName = form.JobName.data
+        elem.MapscoLocation = form.MapscoLocation.data
+        elem.Source = form.Source.data
+        elem.JobNumber = form.JobNumber.data
+        elem.MaterialName = form.MaterialName.data
+        elem.LoadTotal = form.LoadTotal.data
+        elem.LoadDispatchTotal = form.LoadDispatchTotal.data
+        elem.Status = form.Status.data
+        elem.save()
+    else:
+        flash("Wrong data", "danger")
+    return redirect(url_for("main.index"))
+
+
+@main_blueprint.route("/delete_index/<int:order_id>", methods=["POST", "GET"])
+@login_required
+def delete_index(order_id):
+    elem = Order.query.get(order_id)
+    if elem:
+        dispatches = Dispatch.query.filter(Dispatch.orderID == order_id).all()
+        if dispatches:
+            for i in dispatches:
+                i.delete()
+        elem.delete()
+        
+    else:
+        flash("Wrong data", "danger")
+    return redirect(url_for("main.index"))
 
 
 @main_blueprint.route("/intransit")
@@ -49,9 +167,8 @@ def intransit():
         "intransit.html",
         new_table=new_table,
         reversed=reversed,
+        LoadsDispatched_function=LoadsDispatched_function,
     )
-
-
 # @main_blueprint.route("/search", methods=["GET", "POST"])
 # @login_required
 # def search_controller():
@@ -141,86 +258,3 @@ def intransit():
 #         Materials=Materials,
 #     )
 
-
-@main_blueprint.route("/add_record", methods=["POST"])
-@login_required
-def add_order():
-    form = EditForm()
-    if form.validate_on_submit():
-        elem = Order.query.filter(Order.orderID == order_id).first()
-        if not elem:
-            new = Order(
-                CustomerName=form.CustomerName.data,
-                JobName=form.JobName.data,
-                MapscoLocation=form.MapscoLocation.data,
-                Source=form.Source.data,
-                JobNumber=form.JobNumber.data,
-                MaterialName=form.MaterialName.data,
-                LoadTotal=form.LoadTotal.data,
-                LoadDispatchTotal=form.LoadDispatchTotal.data,
-                Status=form.status.data
-            )
-            new.save()
-    else:
-        flash("Wrong data", "danger")
-    return redirect(url_for("main.index"))
-
-
-@main_blueprint.route("/add_assign/<int:order_id>", methods=["POST"])
-@login_required
-def add_assign(order_id):
-    form = AssignForm()
-    if form.validate_on_submit():
-        elem = Dispatch.query.filter(Dispatch.orderID == order_id).first()
-        if not elem:
-            new = Dispatch(
-                orderID=order_id, 
-                TruckNumber=form.TruckNumber.data, 
-                LoadsDispatched=form.LoadsDispatched.data
-            )
-            new.save()
-        else:
-            elem.TruckNumber = form.TruckNumber.data
-            elem.LoadsDispatched = form.LoadsDispatched.data
-            elem.save()
-    else:
-        flash("Wrong data", "danger")
-    return redirect(url_for("main.index"))
-
-
-@main_blueprint.route("/edit_order/<int:order_id>", methods=["POST"])
-@login_required
-def edit_order(order_id):
-    form = EditForm()
-    if form.validate_on_submit():
-        elem = Order.query.get(order_id)
-        elem.CustomerName = form.CustomerName.data
-        elem.JobName = form.JobName.data
-        elem.MapscoLocation = form.MapscoLocation.data
-        elem.Source = form.Source.data
-        elem.JobNumber = form.JobNumber.data
-        elem.MaterialName = form.MaterialName.data
-        elem.LoadTotal = form.LoadTotal.data
-        elem.LoadDispatchTotal = form.LoadDispatchTotal.data
-        elem.Status = form.status.data
-        elem.save()
-    else:
-        flash("Wrong data", "danger")
-    return redirect(url_for("main.index"))
-
-
-@main_blueprint.route("/delete_index/<int:order_id>", methods=["POST", "GET"])
-@login_required
-def delete_index(order_id):
-    elem = Order.query.get(order_id)
-    if elem:
-        elem.delete()
-    else:
-        flash("Wrong data", "danger")
-    return redirect(url_for("main.index"))
-
-
-def lookup():
-    job_numbers = Jobs.query.distinct().all()
-    for i in job_numbers:
-        print(i.JobNumber)

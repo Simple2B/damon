@@ -3,71 +3,7 @@
 {% block content %}
 <!-- class="border-none ddb-cursor-handle" -->
 <!-- Editindex Modal -->
-<div class="modal fade" id="modalEditindex" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Order</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
 
-      <div class="modal-body">
-        <form class="form" role="form" action="" method="post">
-          <div class="__modal-inputs--flex-row">
-            <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
-            <div>
-              {{form.CustomerName.label}}
-              {{form.CustomerName(class='_form-input _form-input--m')}}
-            </div>
-
-            <div>
-              {{form.JobName.label}}
-              {{form.JobName(class='_form-input _form-input--m')}}
-            </div>
-
-            <div>
-              {{form.MapscoLocation.label}}
-              {{form.MapscoLocation(class='_form-input _form-input--m')}}
-            </div>
-
-            <div>
-              {{form.Source.label}}
-              {{form.Source(class='_form-input _form-input--m')}}
-            </div>
-
-            <div>
-              {{form.JobNumber.label}}
-              {{form.JobNumber}}
-            </div>
-
-            <div>
-              {{form.MaterialName.label}}
-              {{form.MaterialName(class='_form-input _form-input--m')}}
-            </div>
-
-            <div>
-              {{form.LoadTotal.label}}
-              {{form.LoadTotal(class='_form-input _form-input--m')}}
-            </div>
-
-
-
-            <div>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">LookUp</button>
-              {{ form.submit(class='btn btn-primary ddb-cursor-handle') }}
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              
-            </div>
-
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 <!-- end of Editindex Modal -->
 
 
@@ -140,10 +76,11 @@
 <button onclick="window.location.href='{{ url_for("main.intransit")}}';">
   In Transit
 </button>
-<button type="button" data-toggle="modal" data-target="#modalEditindex" data-target_link= data-name="{{form}}">Add
-  Order</button>
+<button onclick="window.location.href='{{ url_for("main.new_order")}}';">
+  New Order
+</button>
 <!-- Edit Modal -->
-<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -201,6 +138,12 @@
               <!-- <label class="_label">Loads</label> -->
             </div>
 
+            <div>
+              {{form_edit.Status.label}}
+              {{form_edit.Status(class='_form-input _form-input--m')}}
+              <!-- <label class="_label">Loads</label> -->
+            </div>
+
 
             <div class="">
               {{ form_edit.submit(class='btn btn-primary ddb-cursor-handle') }}
@@ -234,19 +177,19 @@
   </tr>
   {% for new_table_item in reversed(new_table.items) %}
   <tr>
-    <td>{{ new_table_item.SubcontractorName }}</td>
+    <td>{{ new_table_item.CustomerName }}</td>
     <td>{{ new_table_item.JobName }}</td>
     <td>{{ new_table_item.MapscoLocation }}</td>
+    <td>{{ new_table_item.Source }}</td>
     <td>{{ new_table_item.JobNumber }}</td>
     <td>{{ new_table_item.MaterialName }}</td>
-    <td>{{ new_table_item.TruckNumber }}</td>
-    <td>{{ new_table_item.SubcontractorName }}</td>
-    <td>{{ new_table_item.Loads }}</td>
+    <td>{{ new_table_item.LoadTotal }}</td>
+    <td>{{ LoadsDispatched_function(new_table_item)  }}</td>
     <td>{{ new_table_item.Status }}</td>
     <td><button type="button" data-toggle="modal" data-target="#modalEdit"
         data-target-link="{{url_for('main.edit_order', order_id=new_table_item.orderID)}}">Edit</button>
     </td>
-    <td><button type="button" data-toggle="modal" data-target="#modalAssignindex"
+    <td><button type="button" data-toggle="modal" data-target="#modalAssign"
         data-target-link="{{url_for('main.add_assign', order_id=new_table_item.orderID)}}">Assign</button>
     </td>
     <td>

@@ -16,7 +16,7 @@
           {% endwith %}
 <!-- class="border-none ddb-cursor-handle" -->
 <button onclick="window.location.href='{{ url_for("main.index")}}';">
-  Assignments
+  Orders
 </button>
 
 <table border=1 frame=hsides rules=rows,columns style="border:1px solid black;margin-left:auto;margin-right:auto;">
@@ -33,14 +33,14 @@
   </tr>
   {% for new_table_item in reversed(new_table.items) %}
   <tr>
-    <td>{{ new_table_item.SubcontractorName }}</td>
+    <td>{{ new_table_item.CustomerName }}</td>
     <td>{{ new_table_item.JobName }}</td>
     <td>{{ new_table_item.MapscoLocation }}</td>
+    <th>{{ new_table_item.Source }}</th>
     <td>{{ new_table_item.JobNumber }}</td>
     <td>{{ new_table_item.MaterialName }}</td>
-    <td>{{ new_table_item.TruckNumber }}</td>
-    <td>{{ new_table_item.SubcontractorName }}</td>
-    <td>{{ new_table_item.Loads }}</td>
+    <td>{{ new_table_item.LoadTotal }}</td>
+    <td>{{ LoadsDispatched_function(new_table_item) }}</td>
   </tr>
   {% endfor %}
  </table>

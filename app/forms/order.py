@@ -20,4 +20,5 @@ class OrderForm(FlaskForm):
     MaterialName = StringField('MaterialName')
     LoadTotal = IntegerField('LoadTotal')
     Source = StringField('Source')
+    lookup = SubmitField('LookUp')
     submit = SubmitField('Submit')
