@@ -1,11 +1,10 @@
-from flask import render_template, Blueprint, request, redirect, flash, url_for, session
+from flask import render_template, Blueprint, request, redirect, flash, url_for
 from flask_login import login_required
 
 
-from app.models import Tickets, Trucks, Materials, Jobs, Customer, Order, Dispatch
+from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch
 from app.forms import OrderForm, EditForm, AssignForm
 
-from wtforms import StringField, SubmitField, IntegerField, SelectField
 
 main_blueprint = Blueprint("main", __name__)
 
@@ -41,7 +40,7 @@ def new_order():
     if request.method == 'GET':
         job_numbers = job_nums()
         for i in range(len(job_numbers)):
-            job_numbers[i] = (i , job_numbers[i].JobNumber)
+            job_numbers[i] = (i, job_numbers[i].JobNumber)
         form = OrderForm()
         form.JobNumber.choices = job_numbers
         return render_template(
@@ -63,13 +62,13 @@ def new_order():
                     form.JobName.data = Jobs.query.get(prepare.JobID).JobName
                     form.MapscoLocation.data = prepare.MapscoLocation
                     for i in range(len(job_numbers)):
-                        job_numbers[i] = (i , job_numbers[i].JobNumber)
+                        job_numbers[i] = (i, job_numbers[i].JobNumber)
                     form.JobNumber.choices = job_numbers
                     form.JobNumber.data = jobnumber_from_form
                     form.MaterialName.data = Materials.query.get(prepare.MaterialID).MaterialName
                 else:
                     for i in range(len(job_numbers)):
-                        job_numbers[i] = (i , job_numbers[i].JobNumber)
+                        job_numbers[i] = (i, job_numbers[i].JobNumber)
                     form.JobNumber.choices = job_numbers
             return render_template(
                 "new_order.html",
@@ -87,11 +86,12 @@ def new_order():
                     MaterialName=form.MaterialName.data,
                     LoadTotal=form.LoadTotal.data,
                 )
-                new.save()   
+                new.save()
                 return redirect(url_for("main.index"))
             else:
                 flash("Wrong data", "danger")
-        
+
+
 def job_nums():
     prepare = Jobs.query.distinct(Jobs.JobNumber).order_by(Jobs.JobNumber).all()
     res = []
@@ -107,8 +107,8 @@ def add_assign(order_id):
     form = AssignForm()
     if form.validate_on_submit():
         new = Dispatch(
-            orderID=order_id, 
-            TruckNumber=form.TruckNumber.data, 
+            orderID=order_id,
+            TruckNumber=form.TruckNumber.data,
             LoadsDispatched=form.LoadsDispatched.data
         )
         new.save()
@@ -148,7 +148,7 @@ def delete_index(order_id):
             for i in dispatches:
                 i.delete()
         elem.delete()
-        
+
     else:
         flash("Wrong data", "danger")
     return redirect(url_for("main.index"))
@@ -257,4 +257,3 @@ def intransit():
 #         Trucks=Trucks,
 #         Materials=Materials,
 #     )
-

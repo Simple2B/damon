@@ -4,7 +4,6 @@ from wtforms import SubmitField, IntegerField, SelectField, StringField
 
 class EditForm(FlaskForm):
 
-
     CustomerName = StringField('CustomerName')
     JobName = StringField('JobName')
     MapscoLocation = StringField('MapscoLocation')
