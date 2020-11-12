@@ -1,7 +1,7 @@
 import enum
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, SelectField
+from wtforms import StringField, SubmitField, IntegerField
 
 
 class StatusLevel(enum.Enum):
@@ -11,12 +11,11 @@ class StatusLevel(enum.Enum):
 
 
 class OrderForm(FlaskForm):
-    choices = []
 
     CustomerName = StringField('CustomerName')
     JobName = StringField('JobName')
     MapscoLocation = StringField('MapscoLocation')
-    JobNumber = SelectField('JobNumber')
+    JobNumber = StringField('JobNumber')
     MaterialName = StringField('MaterialName')
     LoadTotal = IntegerField('LoadTotal')
     Source = StringField('Source')

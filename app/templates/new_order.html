@@ -22,7 +22,12 @@
 
       <div class="row justify-content-center">
         {{form.JobNumber.label(class="col-sm-3 col-form-label")}}
-        {{form.JobNumber(class="selectpicker col-sm-3 _form-input _form-input--m", data_live_search="true")}}
+        {{form.JobNumber(class='_form-input _form-input--m col-sm-3', list="job-number-list")}}
+        <datalist id="job-number-list">
+          {% for i in job_numbers%}
+          <option value="{{ i }}">
+          {% endfor %}
+        </datalist>
         {{ form.lookup(class='btn btn-primary col-sm-0 ml-1') }}
       </div>
 

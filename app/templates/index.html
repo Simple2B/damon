@@ -22,20 +22,25 @@
         <form class="form" role="form" action="" method="post">
           <div class="__modal-inputs--flex-row">
             <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
-            <div>
-              {{form_assign.TruckNumber.label}}
-              {{form_assign.TruckNumber(class='_form-input _form-input--m')}}
+            <div class="form-group row justify-content-center">
+              {{form_assign.TruckNumber.label(class='col-sm-4')}}
+              {{form_assign.TruckNumber(class='_form-input _form-input--m col-sm-6', list="track-number-list")}}
+              <datalist id="track-number-list">
+                {% for i in truck_numbers%}
+                <option value="{{ i }}">
+                {% endfor %}
+              </datalist>
               <!-- <label class="_label">Loads</label> -->
             </div>
 
-            <div>
-              {{form_assign.LoadsDispatched.label}}
-              {{form_assign.LoadsDispatched(class='_form-input _form-input--m')}}
+            <div class="form-group row justify-content-center">
+              {{form_assign.LoadsDispatched.label(class='col-sm-4')}}
+              {{form_assign.LoadsDispatched(class='_form-input _form-input--m  col-sm-6')}}
             </div>
 
-            <div>
-              {{ form_assign.submit(class='btn btn-primary ddb-cursor-handle') }}
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <div class="form-group row justify-content-center">
+              {{ form_assign.submit(class='btn btn-primary ml-2 col-sm-3 ') }}
+              <button type="button" class="btn btn-secondary col-sm-3 ml-2" data-dismiss="modal">Close</button>
             </div>
 
           </div>

@@ -3,7 +3,7 @@ from flask_login import login_required
 
 
 from app import db
-from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch
+from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch, Trucks
 from app.forms import OrderForm, EditForm, AssignForm
 
 
@@ -16,6 +16,7 @@ def index():
     if request.method == 'GET':
         form_edit = EditForm()
         form_assign = AssignForm()
+        truck_numbers = truck_nums()
         page = request.args.get("page", 1, type=int)
         new_table = Order.query.order_by(Order.orderID.desc()).paginate(
             page=page, per_page=15
@@ -26,6 +27,7 @@ def index():
             form_edit=form_edit,
             form_assign=form_assign,
             reversed=reversed,
+            truck_numbers=truck_numbers,
             LoadsDispatched_function=LoadsDispatched_function,
         )
 
@@ -38,19 +40,18 @@ def LoadsDispatched_function(new_table_item):
 @main_blueprint.route("/new_order", methods=["GET", "POST"])
 @login_required
 def new_order():
+    job_numbers = job_nums()
     if request.method == 'GET':
-        job_numbers = job_nums()
         form = OrderForm()
-        form.JobNumber.choices = [(number, number) for number in job_numbers]
         return render_template(
             "new_order.html",
             form=form,
+            job_numbers=job_numbers,
         )
     elif request.method == 'POST':
         form = OrderForm()
         if form.lookup.data and (not form.submit.data):
             if form.JobNumber.data:
-                job_numbers = job_nums()
                 job_number = form.JobNumber.data
                 # TODO: TAKE FIRST
                 # prepare = Tickets.query.filter(Tickets.JobNumber == job_number).all()
@@ -64,10 +65,10 @@ def new_order():
                     form.JobNumber.data = job_number
                     form.MaterialName.data = Materials.query.get(prepare.MaterialID).MaterialName
 
-                form.JobNumber.choices = [(number, number) for number in job_numbers]
             return render_template(
                 "new_order.html",
                 form=form,
+                job_numbers=job_numbers,
             )
         if form.submit.data:
             form.lookup.data = True
@@ -96,6 +97,11 @@ def job_nums():
     # return res
     all_job_numbers = db.session.query(Tickets.JobNumber).distinct().order_by(Tickets.JobNumber).all()
     return [j[0] for j in all_job_numbers]
+
+
+def truck_nums():
+    all_truck_numbers = db.session.query(Trucks.TruckNumber).distinct().order_by(Trucks.TruckNumber).all()
+    return [j[0] for j in all_truck_numbers]
 
 
 @main_blueprint.route("/add_assign/<int:order_id>", methods=["POST"])
