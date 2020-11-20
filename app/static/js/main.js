@@ -22,6 +22,26 @@ $(document).ready(function() {
       const modal = $(this);
       modal.find('.form').attr('action', target_link);
     });
+
+  // Tdispatch page 
+
+    $('#modalDispatchDelete').on('show.bs.modal', function (event) {
+      const button = $(event.relatedTarget); // Button that triggered the modal
+      const target_link = button.data('target-link');
+      const modal = $(this);
+      modal.find('.form').attr('action', target_link);
+    });
+
+    $('#modalDispatchEdit').on('show.bs.modal', function (event) {
+      const button = $(event.relatedTarget); // Button that triggered the modal
+      const target_link = button.data('target-link');
+      const modal = $(this);
+      modal.find('#editTruckNumberID').val(button.data('trucknumber'));
+      modal.find('#editLoadsDispatchedID').val(button.data('loadsdispatched'));
+      modal.find('.form').attr('action', target_link);
+    });
+
+
     // $('#modalAssign').on('show.bs.modal', function (event) {
     //   const button = $(event.relatedTarget); // Button that triggered the modal
     //   const target_link = button.data('target-link');

@@ -190,10 +190,10 @@
     <td>{{ new_table_item.JobNumber }}</td>
     <td>{{ new_table_item.MaterialName }}</td>
     <td>{{ new_table_item.LoadTotal }}</td>
-    <td>{{ LoadsDispatched_function(new_table_item)  }}</td>
+    <td>{{ LoadsDispatched_function(new_table_item) }}</td>
     <td>{{ new_table_item.Status }}</td>
     <td></td>
-    <td><button type="button" data-toggle="modal" data-target="#modalEdit"
+    <td><button type="button" class="cursor" data-toggle="modal" data-target="#modalEdit"
         data-customername="{{new_table_item.CustomerName}}"
         data-jobname="{{new_table_item.JobName}}"
         data-mapscolocation="{{new_table_item.MapscoLocation}}"
@@ -208,15 +208,15 @@
       data-dispatch-customer-name="{{new_table_item.CustomerName}}"
       data-dispatch-job-name="{{new_table_item.JobName}}"
       data-dispatch-job-number="{{new_table_item.JobNumber}}"
-      data-target-link="{{url_for('main.add_dispatch', order_id=new_table_item.orderID)}}">Dispatch</button> -->
+      data-target-link="vurl_for('main.add_dispatch', order_id=new_table_item.orderID)">Dispatch</button> -->
       <a href="{{url_for('dispatch.dispatch', order_id=new_table_item.orderID)}}">
-        <button type="button">
+        <button type="button" class="cursor">
           Dispatch
         </button>
       </a>
     </td>
     <td>
-      <button type="button" data-toggle="modal" data-target="#modalDelete"
+      <button type="button" class="cursor" data-toggle="modal" data-target="#modalDelete"
         data-target-link="{{url_for('main.delete_index', order_id=new_table_item.orderID)}}">
         <img src="{{ url_for('static', filename='image/delete_element.svg') }}">
       </button>

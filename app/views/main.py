@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request, redirect, flash, url_for
+from flask import render_template, Blueprint, request, session, redirect, flash, url_for
 from flask_login import login_required
 
 
@@ -21,6 +21,9 @@ def index():
         new_table = Order.query.order_by(Order.orderID.desc()).paginate(
             page=page, per_page=15
         )
+
+        session['form_dispatch.value'] = ''
+
         return render_template(
             "index.html",
             new_table=new_table,
@@ -104,20 +107,20 @@ def truck_nums():
     return [j[0] for j in all_truck_numbers]
 
 
-@main_blueprint.route("/add_dispatch/<int:order_id>", methods=["POST"])
-@login_required
-def add_dispatch(order_id):
-    form = DispatchForm()
-    if form.validate_on_submit():
-        new = Dispatch(
-            orderID=order_id,
-            TruckNumber=form.TruckNumber.data,
-            LoadsDispatched=form.LoadsDispatched.data
-        )
-        new.save()
-    else:
-        flash("Wrong data", "danger")
-    return redirect(url_for("main.index"))
+# @main_blueprint.route("/add_dispatch/<int:order_id>", methods=["POST"])
+# @login_required
+# def add_dispatch(order_id):
+#     form = DispatchForm()
+#     if form.validate_on_submit():
+#         new = Dispatch(
+#             orderID=order_id,
+#             TruckNumber=form.TruckNumber.data,
+#             LoadsDispatched=form.LoadsDispatched.data
+#         )
+#         new.save()
+#     else:
+#         flash("Wrong data", "danger")
+#     return redirect(url_for("main.index"))
 
 
 @main_blueprint.route("/edit_order/<int:order_id>", methods=["POST"])

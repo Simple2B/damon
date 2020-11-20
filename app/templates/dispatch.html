@@ -4,6 +4,7 @@
 
 <section>
     <div class="__modal-inputs--flex-row">
+        <h2 class="tdispatch">Dispatch</h2>
         <div class="top-container">
             <div>
                 <div class="dispatch-info">
@@ -24,13 +25,20 @@
                         {{ order_item.JobNumber }}
                     </div>
                 </div>
+                <div class="dispatch-info">
+                    <label>Loads</label>
+                    <div id='dispatchJobNumberID'>
+                        {{ order_item.LoadTotal }}
+                    </div>
+                </div>
             </div>
         </div>
 
+        <form action="{{url_for('dispatch.add_new_dispatch', order_id=order_item.orderID)}}" method="post" id="add_new_dispatch_id">
             <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
             <div class="form-group row justify-content-center">
             {{form_dispatch.TruckNumber.label(class='dispatch-label')}}
-            {{form_dispatch.TruckNumber(class='_form-input _form-input--m col-sm-6', list="track-number-list")}}
+            {{form_dispatch.TruckNumber(class='_form-input _form-input--m col-sm-6', list="track-number-list", value=form_dispatch.value)}}
             <datalist id="track-number-list">
                 {% for i in truck_numbers%}
                 <option value="{{ i }}">
@@ -38,7 +46,6 @@
             </datalist>
             <!-- <label class="_label">Loads</label> -->
             </div>
-        <form action="{{url_for('dispatch.add_new_dispatch', order_id=order_item.orderID)}}" method="post" id="add_new_dispatch_id">
             <div class="form-group row justify-content-center">
                 {{form_dispatch.LoadsDispatched.label(class='dispatch-label')}}
                 {{form_dispatch.LoadsDispatched(class='_form-input _form-input--m col-sm-6')}}
@@ -46,7 +53,7 @@
         </form>
 
         <div class="form-group row justify-content-center">
-            {{ form_dispatch.submit(class='btn_dispatch btn-primary ml-2', form="add_new_dispatch_id") }}
+            {{ form_dispatch.submit(class='btn_dispatch btn-primary', form="add_new_dispatch_id") }}
             <a href="{{url_for('main.index')}}">
                 <button type="button" class="btn_dispatch btn-secondary btn_dispatch ml-2">Back</button>
             </a>
@@ -56,7 +63,7 @@
 
 
     <table border=1 frame=hsides rules=rows,columns class="tdispatch-table">
-        <h2 class="tdispatch">Tdispatch</h2>
+        <h2 class="tdispatch">Dispatches</h2>
         <thead>
             <th>Trucknumber</th>
             <th>Loads</th>
@@ -65,25 +72,29 @@
         </thead>
         <tbody>
 
-                {% if form_dispatch.add_new_dispatch %}
-                <tr>
-                    <td>
-                        TEST 
-                    </td>
-                    <td>
-                        TEST 
-                    </td>
-                    <td>
-                        TEST 
-                    </td>
-                    <td>
-                        <button type="button" data-toggle="modal" data-target="#modalDispatchDelete" class="cursor"
-                        data-target-link="{{url_for('dispatch.delete_dispatch_index', order_id=order_item.orderID)}}">
-                            <img src="{{ url_for('static', filename='image/delete_element.svg') }}">
-                        </button>
-                    </td>
-                </tr>
-                {% endif %}
+            {% for dispatch in form_dispatch.dispatches %}
+            <tr>
+                <td>
+                    {{ dispatch.TruckNumber }} 
+                </td>
+                <td>
+                    {{ dispatch.LoadsDispatched }}
+                </td>
+                <td>
+                    <button type="button" data-toggle="modal" data-target="#modalDispatchEdit" class="cursor"
+                    data-trucknumber="{{ dispatch.TruckNumber }}" data-loadsdispatched="{{ dispatch.LoadsDispatched }}"
+                    data-target-link="{{url_for('dispatch.edit_dispatch_index', order_id=order_item.orderID, dispatch_id=dispatch.dispatchID)}}">
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button type="button" data-toggle="modal" data-target="#modalDispatchDelete" class="cursor"
+                    data-target-link="{{url_for('dispatch.delete_dispatch_index', order_id=order_item.orderID, dispatch_id=dispatch.dispatchID)}}">
+                        <img src="{{ url_for('static', filename='image/delete_element.svg') }}">
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
 
         </tbody>
     </table>
@@ -113,5 +124,42 @@
   </div>
 </div>
 <!-- end of Delete Modal -->
+
+<!-- Edit Modal -->
+<div class="modal fade" id="modalDispatchEdit" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Dispatch</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form" role="form" action="" method="post">
+          <div class="dispatch-edit_modal">
+
+            <div class="">
+                {{form_dispatch.TruckNumber.label(class='dispatch-label')}}
+                {{form_dispatch.TruckNumber(class='col-sm-6', id='editTruckNumberID')}}
+            </div>
+
+            <div class="">
+                {{form_dispatch.LoadsDispatched.label(class='dispatch-label')}}
+                {{form_dispatch.LoadsDispatched(class='col-sm-6', id='editLoadsDispatchedID')}}
+            </div>
+
+            <div class="row justify-content-center">
+                {{ form_edit.submit(class='btn_dispatch btn-primary col-sm-6') }}
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of Edit Modal -->
 
 {% endblock %}
