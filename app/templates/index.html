@@ -203,11 +203,17 @@
         data-loadtotal="{{new_table_item.LoadTotal}}"
         data-target-link="{{url_for('main.edit_order', order_id=new_table_item.orderID)}}">Edit</button>
     </td>
-    <td><button type="button" data-toggle="modal" data-target="#modalAssign"
+    <td>
+      <!-- <button type="button" data-toggle="modal" data-target="#modalAssign"
       data-dispatch-customer-name="{{new_table_item.CustomerName}}"
       data-dispatch-job-name="{{new_table_item.JobName}}"
       data-dispatch-job-number="{{new_table_item.JobNumber}}"
-      data-target-link="{{url_for('main.add_assign', order_id=new_table_item.orderID)}}">Dispatch</button>
+      data-target-link="{{url_for('main.add_dispatch', order_id=new_table_item.orderID)}}">Dispatch</button> -->
+      <a href="{{url_for('dispatch.dispatch', order_id=new_table_item.orderID)}}">
+        <button type="button">
+          Dispatch
+        </button>
+      </a>
     </td>
     <td>
       <button type="button" data-toggle="modal" data-target="#modalDelete"

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField
 
 
-class AssignForm(FlaskForm):
+class DispatchForm(FlaskForm):
     TruckNumber = StringField('TruckNumber')
     LoadsDispatched = IntegerField('LoadsDispatched')
-    submit = SubmitField('Assign')
+    submit = SubmitField('Add New Dispatch')

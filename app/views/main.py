@@ -4,7 +4,7 @@ from flask_login import login_required
 
 from app import db
 from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch, Trucks
-from app.forms import OrderForm, EditForm, AssignForm
+from app.forms import OrderForm, EditForm, DispatchForm
 
 
 main_blueprint = Blueprint("main", __name__)
@@ -15,7 +15,7 @@ main_blueprint = Blueprint("main", __name__)
 def index():
     if request.method == 'GET':
         form_edit = EditForm()
-        form_assign = AssignForm()
+        form_assign = DispatchForm()
         truck_numbers = truck_nums()
         page = request.args.get("page", 1, type=int)
         new_table = Order.query.order_by(Order.orderID.desc()).paginate(
@@ -104,10 +104,10 @@ def truck_nums():
     return [j[0] for j in all_truck_numbers]
 
 
-@main_blueprint.route("/add_assign/<int:order_id>", methods=["POST"])
+@main_blueprint.route("/add_dispatch/<int:order_id>", methods=["POST"])
 @login_required
-def add_assign(order_id):
-    form = AssignForm()
+def add_dispatch(order_id):
+    form = DispatchForm()
     if form.validate_on_submit():
         new = Dispatch(
             orderID=order_id,
