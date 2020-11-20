@@ -14,6 +14,7 @@ $(document).ready(function() {
       modal.find('#edit_JobNumber').val(button.data('jobnumber'));
       modal.find('#edit_MaterialName').val(button.data('materialname'));
       modal.find('#edit_LoadTotal').val(button.data('loadtotal'));
+      console.log(button.data('customername'));
     });
     $('#modalDelete').on('show.bs.modal', function (event) {
       const button = $(event.relatedTarget); // Button that triggered the modal
@@ -25,6 +26,17 @@ $(document).ready(function() {
       const button = $(event.relatedTarget); // Button that triggered the modal
       const target_link = button.data('target-link');
       const modal = $(this);
+      console.log(button.data('dispatchcustomername'));
+      const dispatchCustomerName = document.createTextNode(button.data('dispatch-customer-name'));
+      const dispatchJobName = document.createTextNode(button.data('dispatch-job-name'));
+      const dispatchJobNumber = document.createTextNode(button.data('dispatch-job-number'));
+      document.getElementById('dispatchCustomerNameID').textContent = ""
+      document.getElementById('dispatchJobNameID').textContent = ""
+      document.getElementById('dispatchJobNumberID').textContent = ""
+
+      document.getElementById('dispatchCustomerNameID').appendChild(dispatchCustomerName);
+      document.getElementById('dispatchJobNameID').appendChild(dispatchJobName);
+      document.getElementById('dispatchJobNumberID').appendChild(dispatchJobNumber);
       modal.find('.form').attr('action', target_link);
     });
 

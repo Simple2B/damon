@@ -14,5 +14,5 @@ class Order(db.Model, ModelMixin):
     JobNumber = db.Column(db.String(20))
     MaterialName = db.Column(db.String(20))
     LoadTotal = db.Column(db.Integer)
-    LoadDispatchTotal = db.Column(db.Integer)
+    # LoadDispatchTotal = db.Column(db.Integer)
     Status = db.Column(db.String(9))

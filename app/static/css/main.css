@@ -2,3 +2,9 @@
 * {
     border-radius: 0 !important;
 }
+
+div.dispatch-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 2.6rem;
+}

@@ -12,7 +12,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Assign</h5>
+        <h5 class="modal-title">Dispatch</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -21,6 +21,18 @@
       <div class="modal-body">
         <form class="form" role="form" action="" method="post">
           <div class="__modal-inputs--flex-row">
+            <div class="dispatch-labels">
+              <label>CustomerName</label>
+              <div id='dispatchCustomerNameID'></div>
+            </div>
+            <div class="dispatch-labels">
+              <label>JobName</label>
+              <div id='dispatchJobNameID'></div>
+            </div>
+            <div class="dispatch-labels">
+              <label>JobNumber</label>
+              <div id='dispatchJobNumberID'></div>
+            </div>
             <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
             <div class="form-group row justify-content-center">
               {{form_assign.TruckNumber.label(class='col-sm-4')}}
@@ -164,8 +176,9 @@
     <th>LoadTotal</th>
     <th>LoadDispatchTotal</th>
     <th>Status</th>
+    <th>dispatch summary – truck#(#loads)</th>
     <th>Edit</th>
-    <th>Assign</th>
+    <th>Dispatch</th>
     <th>&times;</th>
   </tr>
   {% for new_table_item in reversed(new_table.items) %}
@@ -179,6 +192,7 @@
     <td>{{ new_table_item.LoadTotal }}</td>
     <td>{{ LoadsDispatched_function(new_table_item)  }}</td>
     <td>{{ new_table_item.Status }}</td>
+    <td></td>
     <td><button type="button" data-toggle="modal" data-target="#modalEdit"
         data-customername="{{new_table_item.CustomerName}}"
         data-jobname="{{new_table_item.JobName}}"
@@ -190,7 +204,10 @@
         data-target-link="{{url_for('main.edit_order', order_id=new_table_item.orderID)}}">Edit</button>
     </td>
     <td><button type="button" data-toggle="modal" data-target="#modalAssign"
-        data-target-link="{{url_for('main.add_assign', order_id=new_table_item.orderID)}}">Assign</button>
+      data-dispatch-customer-name="{{new_table_item.CustomerName}}"
+      data-dispatch-job-name="{{new_table_item.JobName}}"
+      data-dispatch-job-number="{{new_table_item.JobNumber}}"
+      data-target-link="{{url_for('main.add_assign', order_id=new_table_item.orderID)}}">Dispatch</button>
     </td>
     <td>
       <button type="button" data-toggle="modal" data-target="#modalDelete"
