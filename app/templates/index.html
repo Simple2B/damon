@@ -192,7 +192,11 @@
     <td>{{ new_table_item.LoadTotal }}</td>
     <td>{{ LoadsDispatched_function(new_table_item) }}</td>
     <td>{{ new_table_item.Status }}</td>
-    <td></td>
+    <td>
+      {% for dispatch in new_table_item.dispatches %}
+        {{ dispatch.TruckNumber }}({{ dispatch.LoadsDispatched }}) 
+      {% endfor %}
+    </td>
     <td><button type="button" class="cursor" data-toggle="modal" data-target="#modalEdit"
         data-customername="{{new_table_item.CustomerName}}"
         data-jobname="{{new_table_item.JobName}}"

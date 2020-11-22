@@ -61,7 +61,7 @@
 
     </div>
 
-
+    {% if form_dispatch.dispatches %}
     <table border=1 frame=hsides rules=rows,columns class="tdispatch-table">
         <h2 class="tdispatch">Dispatches</h2>
         <thead>
@@ -98,6 +98,7 @@
 
         </tbody>
     </table>
+    {% endif %}
 </section>
 
 <!-- Delete Modal -->
