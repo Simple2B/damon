@@ -25,6 +25,15 @@ div.dispatch-info {
     justify-content: space-between;
 }
 
+/* Centralized title block */
+div.dispatch-info div.dispatch-info__centralized {
+    width: 45%;
+}
+div.dispatch-info div.dispatch-info__centralized div {
+    text-align: left;
+}
+/* endblock */
+
 .dispatch-info label {
     font-weight: 700;
 }
@@ -76,6 +85,10 @@ input.btn_dispatch {
     margin-right: 1rem;
 }
 
+.dispatch-edit_modal__btn_dispatch input.btn_dispatch {
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
 /* edit dispatch Modal */
 
 .dispatch-edit_modal {   
@@ -88,6 +101,10 @@ input.btn_dispatch {
     display: flex;
     justify-content: space-around;
     margin: 0rem 0rem 0.5rem;
+}
+
+.dispatch-edit_modal__inputs span {
+    width: 10vw;
 }
 /* end edit dispatch Modal */
 

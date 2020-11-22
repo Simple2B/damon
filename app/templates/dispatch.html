@@ -9,26 +9,34 @@
             <div>
                 <div class="dispatch-info">
                     <label>CustomerName</label>
-                    <div id='dispatchCustomerNameID'>
-                        {{ order_item.CustomerName }}
+                    <div class="dispatch-info__centralized">
+                      <div id='dispatchCustomerNameID'>
+                          {{ order_item.CustomerName }}
+                      </div>
                     </div>
                 </div>
                 <div class="dispatch-info">
                     <label>JobName</label>
-                    <div id='dispatchJobNameID'>
-                        {{ order_item.JobName }}
+                    <div class="dispatch-info__centralized">
+                      <div id='dispatchJobNameID'>
+                          {{ order_item.JobName }}
+                      </div>
                     </div>
                 </div>
                 <div class="dispatch-info">
                     <label>JobNumber</label>
-                    <div id='dispatchJobNumberID'>
-                        {{ order_item.JobNumber }}
-                    </div>
+                    <div class="dispatch-info__centralized">
+                      <div id='dispatchJobNumberID'>
+                          {{ order_item.JobNumber }}
+                      </div>
+                     </div> 
                 </div>
                 <div class="dispatch-info">
                     <label>Loads</label>
-                    <div id='dispatchJobNumberID'>
-                        {{ order_item.LoadTotal }}
+                    <div class="dispatch-info__centralized">
+                      <div id='dispatchJobNumberID'>
+                          {{ order_item.LoadTotal }}
+                      </div>
                     </div>
                 </div>
             </div>
@@ -44,7 +52,6 @@
                 <option value="{{ i }}">
                 {% endfor %}
             </datalist>
-            <!-- <label class="_label">Loads</label> -->
             </div>
             <div class="form-group row justify-content-center">
                 {{form_dispatch.LoadsDispatched.label(class='dispatch-label')}}
@@ -140,18 +147,21 @@
       <div class="modal-body">
         <form class="form" role="form" action="" method="post">
           <div class="dispatch-edit_modal">
-
-            <div class="">
+            <div class="dispatch-edit_modal__inputs">
+              <span>
                 {{form_dispatch.TruckNumber.label(class='dispatch-label')}}
+              </span>
                 {{form_dispatch.TruckNumber(class='col-sm-6', id='editTruckNumberID')}}
             </div>
 
-            <div class="">
+            <div class="dispatch-edit_modal__inputs">
+              <span>
                 {{form_dispatch.LoadsDispatched.label(class='dispatch-label')}}
+              </span>
                 {{form_dispatch.LoadsDispatched(class='col-sm-6', id='editLoadsDispatchedID')}}
             </div>
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center dispatch-edit_modal__btn_dispatch">
                 {{ form_edit.submit(class='btn_dispatch btn-primary col-sm-6') }}
             </div>
 
