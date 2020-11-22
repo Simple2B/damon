@@ -107,22 +107,6 @@ def truck_nums():
     return [j[0] for j in all_truck_numbers]
 
 
-# @main_blueprint.route("/add_dispatch/<int:order_id>", methods=["POST"])
-# @login_required
-# def add_dispatch(order_id):
-#     form = DispatchForm()
-#     if form.validate_on_submit():
-#         new = Dispatch(
-#             orderID=order_id,
-#             TruckNumber=form.TruckNumber.data,
-#             LoadsDispatched=form.LoadsDispatched.data
-#         )
-#         new.save()
-#     else:
-#         flash("Wrong data", "danger")
-#     return redirect(url_for("main.index"))
-
-
 @main_blueprint.route("/edit_order/<int:order_id>", methods=["POST"])
 @login_required
 def edit_order(order_id):
