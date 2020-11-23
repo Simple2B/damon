@@ -92,12 +92,6 @@ def new_order():
 
 
 def job_nums():
-    # prepare = Jobs.query.distinct(Jobs.JobNumber).order_by(Jobs.JobNumber).all()
-    # res = []
-    # for i in prepare:
-    #     if Tickets.query.filter(Tickets.JobID == i.JobID).first():
-    #         res.append(i)
-    # return res
     all_job_numbers = db.session.query(Tickets.JobNumber).distinct().order_by(Tickets.JobNumber).all()
     return [j[0] for j in all_job_numbers]
 
@@ -159,91 +153,3 @@ def intransit():
         reversed=reversed,
         LoadsDispatched_function=LoadsDispatched_function,
     )
-# @main_blueprint.route("/search", methods=["GET", "POST"])
-# @login_required
-# def search_controller():
-#     form = OrderForm()
-#     if request.method == "POST":
-#         session["formdata"] = request.form
-#     elif request.method == "GET":
-#         formdata = session.get("formdata", None)
-#         if formdata:
-#             form = OrderForm(
-#                 CustomerName=formdata["CustomerName"],
-#                 JobName=formdata["JobName"],
-#                 MapscoLocation=formdata["MapscoLocation"],
-#                 JobNumber=formdata["JobNumber"],
-#                 MaterialName=formdata["MaterialName"],
-#                 LoadOutNum=formdata["LoadOutNum"],
-#                 TruckNumber=formdata["TruckNumber"],
-#                 SubcontractorName=formdata["SubcontractorName"],
-#             )
-#             form.validate()
-#     prepare = None
-#     if form.SubcontractorName.data:
-#         prepare = Tickets.query.filter(
-#             Tickets.SubcontractorName == form.SubcontractorName.data
-#         )
-#     if form.JobNumber.data and (prepare is None):
-#         prepare = Tickets.query.filter(Tickets.JobNumber == form.JobNumber.data)
-#     elif form.JobNumber.data and prepare:
-#         prepare = prepare.filter(Tickets.JobNumber == form.JobNumber.data)
-#     if form.MapscoLocation.data and (prepare is None):
-#         prepare = Tickets.query.filter(Tickets.JobNumber == form.MapscoLocation.data)
-#     elif form.MapscoLocation.data and prepare:
-#         prepare = prepare.filter(Tickets.MapscoLocation == form.MapscoLocation.data)
-#     if form.LoadOutNum.data and (prepare is None):
-#         prepare = Tickets.query.filter(Tickets.LoadOutNum == form.LoadOutNum.data)
-#     elif form.LoadOutNum.data and prepare:
-#         prepare = prepare.filter(Tickets.LoadOutNum == form.LoadOutNum.data)
-#     if form.TruckNumber.data:
-#         trucks = Trucks.query.filter(Trucks.TruckNumber == form.TruckNumber.data).all()
-#         truckids = [x.TruckID for x in trucks]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.TruckID.in_(truckids))
-#         else:
-#             prepare = prepare.filter(Tickets.TruckID.in_(truckids))
-#     if form.MaterialName.data:
-#         materials = Materials.query.filter(
-#             Materials.MaterialName == form.MaterialName.data
-#         ).all()
-#         materialids = [x.MaterialID for x in materials]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.MaterialID.in_(materialids))
-#         else:
-#             prepare = prepare.filter(Tickets.MaterialID.in_(materialids))
-#     if form.JobName.data:
-#         jobs = Jobs.query.filter(Jobs.JobName == form.JobName.data).all()
-#         jobids = [x.JobID for x in jobs]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.JobID.in_(jobids))
-#         else:
-#             prepare = prepare.filter(Tickets.JobID.in_(jobids))
-#     if form.CustomerName.data:
-#         customers = Customer.query.filter(
-#             Customer.CustomerName == form.CustomerName.data
-#         ).all()
-#         customerids = [x.CustomerID for x in customers]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.CustomerID.in_(customerids))
-#         else:
-#             prepare = prepare.filter(Tickets.CustomerID.in_(customerids))
-#     new_table = None
-#     page = request.args.get("page", 1, type=int)
-#     if prepare:
-#         new_table = prepare.order_by(Tickets.TicketID.desc()).paginate(
-#             page=page, per_page=15
-#         )
-#     form = EditForm()
-#     if not new_table:
-#         return redirect(url_for("main.index"))
-#     return render_template(
-#         "search.html",
-#         new_table=new_table,
-#         form=form,
-#         Customer=Customer,
-#         Jobs=Jobs,
-#         Tickets=Tickets,
-#         Trucks=Trucks,
-#         Materials=Materials,
-#     )

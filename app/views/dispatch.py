@@ -25,11 +25,11 @@ def add_new_dispatch(order_id):
                 session['form_dispatch.value'] = ''
             else:
                 session['form_dispatch.value'] = form_dispatch.TruckNumber.data
-                flash(f"Total loads more than {order.LoadTotal}!", "warning")
+                flash(f"Total loads more than {order.LoadTotal}!", "danger")
                 return redirect(url_for("dispatch.dispatch", order_id=order_id))
         else:
             session['form_dispatch.value'] = form_dispatch.TruckNumber.data
-            flash(f"Loads need to be less or equal {order.LoadTotal}!", "warning")
+            flash(f"Loads need to be less or equal {order.LoadTotal}!", "danger")
     else:
         flash("Wrong data", "danger")
     return redirect(url_for("dispatch.dispatch", order_id=order_id))
@@ -57,7 +57,7 @@ def edit_dispatch_index(order_id, dispatch_id):
             dispatch.LoadsDispatched = request.form['LoadsDispatched']
             dispatch.save()
         else:
-            flash(f"Total loads more than {order.LoadTotal}!", "warning")
+            flash(f"Total loads more than {order.LoadTotal}!", "danger")
     else:
         flash("Wrong data", "danger")
     return redirect(url_for("dispatch.dispatch", order_id=order_id))

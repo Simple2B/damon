@@ -9,6 +9,10 @@
     cursor: pointer;
 }
 
+#modalEdit ._form-input--m {
+    max-width: 100%;
+}
+
 /* dispatch */
 .top-container {
     display: flex;
