@@ -6,51 +6,6 @@
 <!-- end of Editindex Modal -->
 
 
-<!-- Assign Modal -->
-<div class="modal fade" id="modalAssign" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Assign</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <form class="form" role="form" action="" method="post">
-          <div class="__modal-inputs--flex-row">
-            <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
-            <div class="form-group row justify-content-center">
-              {{form_assign.TruckNumber.label(class='col-sm-4')}}
-              {{form_assign.TruckNumber(class='_form-input _form-input--m col-sm-6', list="track-number-list")}}
-              <datalist id="track-number-list">
-                {% for i in truck_numbers%}
-                <option value="{{ i }}">
-                {% endfor %}
-              </datalist>
-              <!-- <label class="_label">Loads</label> -->
-            </div>
-
-            <div class="form-group row justify-content-center">
-              {{form_assign.LoadsDispatched.label(class='col-sm-4')}}
-              {{form_assign.LoadsDispatched(class='_form-input _form-input--m  col-sm-6')}}
-            </div>
-
-            <div class="form-group row justify-content-center">
-              {{ form_assign.submit(class='btn btn-primary ml-2 col-sm-3 ') }}
-              <button type="button" class="btn btn-secondary col-sm-3 ml-2" data-dismiss="modal">Close</button>
-            </div>
-
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end of Assign Modal -->
-
 <!-- Delete Modal -->
 <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="ModalLabelDelete"
   aria-hidden="true">
@@ -164,8 +119,9 @@
     <th>LoadTotal</th>
     <th>LoadDispatchTotal</th>
     <th>Status</th>
+    <th>dispatch summary – truck#(#loads)</th>
     <th>Edit</th>
-    <th>Assign</th>
+    <th>Dispatch</th>
     <th>&times;</th>
   </tr>
   {% for new_table_item in reversed(new_table.items) %}
@@ -177,9 +133,14 @@
     <td>{{ new_table_item.JobNumber }}</td>
     <td>{{ new_table_item.MaterialName }}</td>
     <td>{{ new_table_item.LoadTotal }}</td>
-    <td>{{ LoadsDispatched_function(new_table_item)  }}</td>
+    <td>{{ LoadsDispatched_function(new_table_item) }}</td>
     <td>{{ new_table_item.Status }}</td>
-    <td><button type="button" data-toggle="modal" data-target="#modalEdit"
+    <td>
+      {% for dispatch in new_table_item.dispatches %}
+        {{ dispatch.TruckNumber }}({{ dispatch.LoadsDispatched }}) 
+      {% endfor %}
+    </td>
+    <td><button type="button" class="cursor" data-toggle="modal" data-target="#modalEdit"
         data-customername="{{new_table_item.CustomerName}}"
         data-jobname="{{new_table_item.JobName}}"
         data-mapscolocation="{{new_table_item.MapscoLocation}}"
@@ -189,11 +150,15 @@
         data-loadtotal="{{new_table_item.LoadTotal}}"
         data-target-link="{{url_for('main.edit_order', order_id=new_table_item.orderID)}}">Edit</button>
     </td>
-    <td><button type="button" data-toggle="modal" data-target="#modalAssign"
-        data-target-link="{{url_for('main.add_assign', order_id=new_table_item.orderID)}}">Assign</button>
+    <td>
+      <a href="{{url_for('dispatch.dispatch', order_id=new_table_item.orderID)}}">
+        <button type="button" class="cursor">
+          Dispatch
+        </button>
+      </a>
     </td>
     <td>
-      <button type="button" data-toggle="modal" data-target="#modalDelete"
+      <button type="button" class="cursor" data-toggle="modal" data-target="#modalDelete"
         data-target-link="{{url_for('main.delete_index', order_id=new_table_item.orderID)}}">
         <img src="{{ url_for('static', filename='image/delete_element.svg') }}">
       </button>

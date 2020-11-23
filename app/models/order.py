@@ -1,5 +1,6 @@
 from app import db
 from app.models.utils import ModelMixin
+from sqlalchemy.orm import relationship
 
 
 class Order(db.Model, ModelMixin):
@@ -14,5 +15,7 @@ class Order(db.Model, ModelMixin):
     JobNumber = db.Column(db.String(20))
     MaterialName = db.Column(db.String(20))
     LoadTotal = db.Column(db.Integer)
-    LoadDispatchTotal = db.Column(db.Integer)
+    # LoadDispatchTotal = db.Column(db.Integer)
     Status = db.Column(db.String(9))
+
+    dispatches = relationship('Dispatch')

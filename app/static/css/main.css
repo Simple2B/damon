@@ -2,3 +2,120 @@
 * {
     border-radius: 0 !important;
 }
+
+/* global */
+
+.cursor {
+    cursor: pointer;
+}
+
+#modalEdit ._form-input--m {
+    max-width: 100%;
+}
+
+/* dispatch */
+.top-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.top-container > div:first-child {
+    width: 30.5vw;
+}
+
+div.dispatch-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Centralized title block */
+div.dispatch-info div.dispatch-info__centralized {
+    width: 45%;
+}
+div.dispatch-info div.dispatch-info__centralized div {
+    text-align: left;
+}
+/* endblock */
+
+.dispatch-info label {
+    font-weight: 700;
+}
+
+.tdispatch-table {
+    border:1px solid black;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.tdispatch-table th {
+    text-align: center;
+}
+
+h2.tdispatch {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.dispatch-label {
+    flex: 0 0 10%;
+}
+
+._form-input--m {
+    max-width: 20%;
+}
+
+.btn_dispatch {
+    min-width: 15vw;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    cursor: pointer;
+}
+
+input.btn_dispatch {
+    margin-right: 1rem;
+}
+
+.dispatch-edit_modal__btn_dispatch input.btn_dispatch {
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+/* edit dispatch Modal */
+
+.dispatch-edit_modal {   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dispatch-edit_modal > div {
+    display: flex;
+    justify-content: space-around;
+    margin: 0rem 0rem 0.5rem;
+}
+
+.dispatch-edit_modal__inputs span {
+    width: 10vw;
+}
+/* end edit dispatch Modal */
+
+/* Media query */
+@media (min-width: 576px) {
+.col-sm-3 {
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 35%;
+}

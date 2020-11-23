@@ -14,6 +14,7 @@ $(document).ready(function() {
       modal.find('#edit_JobNumber').val(button.data('jobnumber'));
       modal.find('#edit_MaterialName').val(button.data('materialname'));
       modal.find('#edit_LoadTotal').val(button.data('loadtotal'));
+      console.log(button.data('customername'));
     });
     $('#modalDelete').on('show.bs.modal', function (event) {
       const button = $(event.relatedTarget); // Button that triggered the modal
@@ -21,10 +22,22 @@ $(document).ready(function() {
       const modal = $(this);
       modal.find('.form').attr('action', target_link);
     });
-    $('#modalAssign').on('show.bs.modal', function (event) {
+
+  // Tdispatch page 
+
+    $('#modalDispatchDelete').on('show.bs.modal', function (event) {
       const button = $(event.relatedTarget); // Button that triggered the modal
       const target_link = button.data('target-link');
       const modal = $(this);
+      modal.find('.form').attr('action', target_link);
+    });
+
+    $('#modalDispatchEdit').on('show.bs.modal', function (event) {
+      const button = $(event.relatedTarget); // Button that triggered the modal
+      const target_link = button.data('target-link');
+      const modal = $(this);
+      modal.find('#editTruckNumberID').val(button.data('trucknumber'));
+      modal.find('#editLoadsDispatchedID').val(button.data('loadsdispatched'));
       modal.find('.form').attr('action', target_link);
     });
 
