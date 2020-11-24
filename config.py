@@ -8,7 +8,7 @@ class BaseConfig(object):
 
     APP_NAME = 'Flask App'
     DEBUG_TB_ENABLED = False
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'Ensure you set a secret key, this is important!')
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'f7d6afc1318f39365696a141213f66fbe479a71b1e69d05e3fc7a004b085277d28d1dcd7884776ce7ede46')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = False
 
