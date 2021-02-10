@@ -38,6 +38,26 @@
 <button onclick="window.location.href='{{ url_for("main.new_order")}}';">
   New Order
 </button>
+<div class="filt-cont" id="filter">
+  <form role="form" method="post" class="filt-cont">
+    <div class="filt-form">
+      <div class="filt-cont">From:
+        <input type="date" name="date_from" value="{{ date_from }}">
+      </div>
+      <div class="filt-form second-date">To:
+        <input type="date" name="date_to" value="{{ date_to }}">
+      </div>
+    </div>
+    <div class="filt-form">
+      {{form_filter.city.label}}
+      {{form_filter.city}}
+    </div>
+    <div class="filt-form">
+      {{form_filter.submit}}
+    </div>
+  </form>
+</div>
+
 <!-- Edit Modal -->
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit"
   aria-hidden="true">
@@ -61,6 +81,21 @@
             <div class="form-group row">
               <label class="col-sm-5 col-form-label">JobName:</label>
               {{form_edit.JobName(id="edit_JobName", class='_form-input _form-input--m col-sm-6')}}
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">Destination:</label>
+              {{form_edit.destination(id="edit_destination", class='_form-input _form-input--m col-sm-6')}}
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">PO:</label>
+              {{form_edit.po(id="edit_po", class='_form-input _form-input--m col-sm-6')}}
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label">City:</label>
+              {{form_edit.city(id="edit_city", class='_form-input _form-input--m col-sm-6')}}
             </div>
 
             <div class="form-group row">
@@ -112,13 +147,15 @@
   <tr>
     <th>CustomerName</th>
     <th>JobName</th>
-    <th>MapscoLocation</th>
+    <th>Destination</th>
+    <th>Date</th>
+    <th>PO</th>
+    <th>City</th>
+    <th>Mapsco</th>
     <th>Source</th>
     <th>JobNumber</th>
-    <th>MaterialName</th>
-    <th>LoadTotal</th>
-    <th>LoadDispatchTotal</th>
-    <th>Status</th>
+    <th>Material</th>
+    <th>Loads</th>
     <th>dispatch summary – truck#(#loads)</th>
     <th>Edit</th>
     <th>Dispatch</th>
@@ -126,23 +163,47 @@
   </tr>
   {% for new_table_item in reversed(new_table.items) %}
   <tr>
+    {% if new_table_item.city.value == "Dallas" %}
+    <td class="color-dallas">{{ new_table_item.CustomerName }}</td>
+    <td class="color-dallas">{{ new_table_item.JobName }}</td>
+    <td class="color-dallas">{{ new_table_item.destination }}</td>
+    <td class="color-dallas">{{ new_table_item.created }}</td>
+    <td class="color-dallas">{{ new_table_item.po }}</td>
+    <td class="color-dallas">{{ new_table_item.city.value }}</td>
+    <td class="color-dallas">{{ new_table_item.MapscoLocation }}</td>
+    <td class="color-dallas">{{ new_table_item.Source }}</td>
+    <td class="color-dallas">{{ new_table_item.JobNumber }}</td>
+    <td class="color-dallas">{{ new_table_item.MaterialName }}</td>
+    <td class="color-dallas">{{ new_table_item.LoadTotal }}/{{ LoadsDispatched_function(new_table_item) }}</td>
+    <td class="color-dallas">
+      {% for dispatch in new_table_item.dispatches %}
+        {{ dispatch.TruckNumber }}({{ dispatch.LoadsDispatched }})
+      {% endfor %}
+    </td>
+    {% else %}
     <td>{{ new_table_item.CustomerName }}</td>
     <td>{{ new_table_item.JobName }}</td>
+    <td>{{ new_table_item.destination }}</td>
+    <td>{{ new_table_item.created }}</td>
+    <td>{{ new_table_item.po }}</td>
+    <td>{{ new_table_item.city.value }}</td>
     <td>{{ new_table_item.MapscoLocation }}</td>
     <td>{{ new_table_item.Source }}</td>
     <td>{{ new_table_item.JobNumber }}</td>
     <td>{{ new_table_item.MaterialName }}</td>
-    <td>{{ new_table_item.LoadTotal }}</td>
-    <td>{{ LoadsDispatched_function(new_table_item) }}</td>
-    <td>{{ new_table_item.Status }}</td>
+    <td>{{ new_table_item.LoadTotal }}/{{ LoadsDispatched_function(new_table_item) }}</td>
     <td>
       {% for dispatch in new_table_item.dispatches %}
-        {{ dispatch.TruckNumber }}({{ dispatch.LoadsDispatched }}) 
+        {{ dispatch.TruckNumber }}({{ dispatch.LoadsDispatched }})
       {% endfor %}
     </td>
+    {% endif %}
     <td><button type="button" class="cursor" data-toggle="modal" data-target="#modalEdit"
         data-customername="{{new_table_item.CustomerName}}"
         data-jobname="{{new_table_item.JobName}}"
+        data-destination="{{new_table_item.destination}}"
+        data-po="{{new_table_item.po}}"
+        data-city="{{new_table_item.city}}"
         data-mapscolocation="{{new_table_item.MapscoLocation}}"
         data-source="{{new_table_item.Source}}"
         data-jobnumber="{{new_table_item.JobNumber}}"
