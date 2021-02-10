@@ -3,7 +3,7 @@ from flask_login import login_required
 
 from app import db
 from app.models import Order, Dispatch, Trucks
-from app.forms import OrderForm, EditForm, DispatchForm
+from app.forms import EditForm, DispatchForm
 
 dispatch_blueprint = Blueprint("dispatch", __name__)
 
@@ -51,8 +51,8 @@ def delete_dispatch_index(order_id, dispatch_id):
 def edit_dispatch_index(order_id, dispatch_id):
     if request.form:
         order = Order.query.get(order_id)
-        dispatch = Dispatch.query.filter(Dispatch.orderID == order_id).filter(Dispatch.dispatchID == dispatch_id).first()
-        if LoadsDispatchedTotal_function(order_id, int(request.form['LoadsDispatched']) - dispatch.LoadsDispatched) <= order.LoadTotal:
+        dispatch = Dispatch.query.filter(Dispatch.orderID == order_id).filter(Dispatch.dispatchID == dispatch_id).first()  # noqa 501
+        if LoadsDispatchedTotal_function(order_id, int(request.form['LoadsDispatched']) - dispatch.LoadsDispatched) <= order.LoadTotal:  # noqa 501
             dispatch.TruckNumber = request.form['TruckNumber']
             dispatch.LoadsDispatched = request.form['LoadsDispatched']
             dispatch.save()
@@ -81,9 +81,11 @@ def dispatch(order_id):
         truck_numbers=truck_numbers,
     )
 
+
 def truck_nums():
     all_truck_numbers = db.session.query(Trucks.TruckNumber).distinct().order_by(Trucks.TruckNumber).all()
     return [j[0] for j in all_truck_numbers]
+
 
 def LoadsDispatchedTotal_function(order_id, load_dispatched=0):
     if load_dispatched:

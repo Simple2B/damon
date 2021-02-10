@@ -1,5 +1,4 @@
 from datetime import datetime
-from re import DEBUG
 from flask import render_template, Blueprint, request, session, redirect, flash, url_for
 from flask_login import login_required
 
