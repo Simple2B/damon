@@ -24,6 +24,10 @@
   <tr>
     <th>CustomerName</th>
     <th>JobName</th>
+    <th>Destination</th>
+    <th>Date</th>
+    <th>PO</th>
+    <th>City</th>
     <th>MapscoLocation</th>
     <th>Source</th>
     <th>JobNumber</th>
@@ -35,6 +39,10 @@
   <tr>
     <td>{{ new_table_item.CustomerName }}</td>
     <td>{{ new_table_item.JobName }}</td>
+    <td>{{ new_table_item.destination }}</td>
+    <td>{{ new_table_item.created }}</td>
+    <td>{{ new_table_item.po }}</td>
+    <td>{{ new_table_item.city.value }}</td>
     <td>{{ new_table_item.MapscoLocation }}</td>
     <th>{{ new_table_item.Source }}</th>
     <td>{{ new_table_item.JobNumber }}</td>

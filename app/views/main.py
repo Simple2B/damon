@@ -1,11 +1,13 @@
+from datetime import datetime
 from flask import render_template, Blueprint, request, session, redirect, flash, url_for
 from flask_login import login_required
 
 
 from app import db
 from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch, Trucks
-from app.forms import OrderForm, EditForm, DispatchForm
+from app.forms import OrderForm, EditForm, DispatchForm, FilterForm
 
+from app.logger import log
 
 main_blueprint = Blueprint("main", __name__)
 
@@ -16,6 +18,7 @@ def index():
     if request.method == 'GET':
         form_edit = EditForm()
         form_assign = DispatchForm()
+        form_filter = FilterForm()
         truck_numbers = truck_nums()
         page = request.args.get("page", 1, type=int)
         new_table = Order.query.order_by(Order.orderID.desc()).paginate(
@@ -29,7 +32,53 @@ def index():
             new_table=new_table,
             form_edit=form_edit,
             form_assign=form_assign,
+            form_filter=form_filter,
             reversed=reversed,
+            truck_numbers=truck_numbers,
+            LoadsDispatched_function=LoadsDispatched_function,
+        )
+    else:
+        response = request.form.to_dict()
+        date_from = response.get('date_from', '')
+        date_to = response.get('date_to', '')
+        form_edit = EditForm()
+        form_assign = DispatchForm()
+        form_filter = FilterForm()
+        truck_numbers = truck_nums()
+        page = request.args.get("page", 1, type=int)
+        query_data = Order.query.order_by(Order.orderID.desc())
+        if form_filter.city.data:
+            log(log.INFO, "Get city [%s]", form_filter.city.data)
+            query_data = query_data.filter_by(city=form_filter.city.data)
+        else:
+            log(log.INFO, "City did not select")
+        if date_from:
+            log(log.INFO, "Get date from [%s]", date_from)
+            filter_from = datetime.strptime(date_from, '%Y-%m-%d')
+            query_data = query_data.filter(Order.created > filter_from)
+            log(log.INFO, "Orders sorted from [%s]", date_from)
+        else:
+            log(log.INFO, "Date from did not select")
+        if date_to:
+            log(log.INFO, "Get date to [%s]", date_to)
+            filter_to = datetime.strptime(date_from, '%Y-%m-%d')
+            query_data = query_data.filter(Order.created < filter_to)
+            log(log.INFO, "Orders sorted to [%s]", date_to)
+        else:
+            log(log.INFO, "Date to did not select")
+        new_table = query_data.paginate(
+            page=page, per_page=15
+        )
+
+        return render_template(
+            "index.html",
+            new_table=new_table,
+            form_edit=form_edit,
+            form_assign=form_assign,
+            form_filter=form_filter,
+            reversed=reversed,
+            date_to=date_to,
+            date_from=date_from,
             truck_numbers=truck_numbers,
             LoadsDispatched_function=LoadsDispatched_function,
         )
@@ -79,6 +128,9 @@ def new_order():
                 new = Order(
                     CustomerName=form.CustomerName.data,
                     JobName=form.JobName.data,
+                    destination=form.destination.data,
+                    po=form.po.data,
+                    city=form.city.data,
                     MapscoLocation=form.MapscoLocation.data,
                     Source=form.Source.data,
                     JobNumber=form.JobNumber.data,
@@ -109,6 +161,9 @@ def edit_order(order_id):
         elem = Order.query.get(order_id)
         elem.CustomerName = form.CustomerName.data
         elem.JobName = form.JobName.data
+        elem.destination = form.destination.data
+        elem.po = form.po.data
+        elem.city = form.city.data
         elem.MapscoLocation = form.MapscoLocation.data
         elem.Source = form.Source.data
         elem.JobNumber = form.JobNumber.data
