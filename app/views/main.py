@@ -1,11 +1,13 @@
-from flask import render_template, Blueprint, request, redirect, flash, url_for
+from datetime import datetime
+from flask import render_template, Blueprint, request, session, redirect, flash, url_for
 from flask_login import login_required
 
 
 from app import db
 from app.models import Tickets, Materials, Jobs, Customer, Order, Dispatch, Trucks
-from app.forms import OrderForm, EditForm, AssignForm
+from app.forms import OrderForm, EditForm, DispatchForm, FilterForm
 
+from app.logger import log
 
 main_blueprint = Blueprint("main", __name__)
 
@@ -15,18 +17,68 @@ main_blueprint = Blueprint("main", __name__)
 def index():
     if request.method == 'GET':
         form_edit = EditForm()
-        form_assign = AssignForm()
+        form_assign = DispatchForm()
+        form_filter = FilterForm()
         truck_numbers = truck_nums()
         page = request.args.get("page", 1, type=int)
         new_table = Order.query.order_by(Order.orderID.desc()).paginate(
             page=page, per_page=15
         )
+
+        session['form_dispatch.value'] = ''
+
         return render_template(
             "index.html",
             new_table=new_table,
             form_edit=form_edit,
             form_assign=form_assign,
+            form_filter=form_filter,
             reversed=reversed,
+            truck_numbers=truck_numbers,
+            LoadsDispatched_function=LoadsDispatched_function,
+        )
+    else:
+        response = request.form.to_dict()
+        date_from = response.get('date_from', '')
+        date_to = response.get('date_to', '')
+        form_edit = EditForm()
+        form_assign = DispatchForm()
+        form_filter = FilterForm()
+        truck_numbers = truck_nums()
+        page = request.args.get("page", 1, type=int)
+        query_data = Order.query.order_by(Order.orderID.desc())
+        if form_filter.city.data:
+            log(log.INFO, "Get city [%s]", form_filter.city.data)
+            query_data = query_data.filter_by(city=form_filter.city.data)
+        else:
+            log(log.INFO, "City did not select")
+        if date_from:
+            log(log.INFO, "Get date from [%s]", date_from)
+            filter_from = datetime.strptime(date_from, '%Y-%m-%d')
+            query_data = query_data.filter(Order.created > filter_from)
+            log(log.INFO, "Orders sorted from [%s]", date_from)
+        else:
+            log(log.INFO, "Date from did not select")
+        if date_to:
+            log(log.INFO, "Get date to [%s]", date_to)
+            filter_to = datetime.strptime(date_from, '%Y-%m-%d')
+            query_data = query_data.filter(Order.created < filter_to)
+            log(log.INFO, "Orders sorted to [%s]", date_to)
+        else:
+            log(log.INFO, "Date to did not select")
+        new_table = query_data.paginate(
+            page=page, per_page=15
+        )
+
+        return render_template(
+            "index.html",
+            new_table=new_table,
+            form_edit=form_edit,
+            form_assign=form_assign,
+            form_filter=form_filter,
+            reversed=reversed,
+            date_to=date_to,
+            date_from=date_from,
             truck_numbers=truck_numbers,
             LoadsDispatched_function=LoadsDispatched_function,
         )
@@ -76,6 +128,9 @@ def new_order():
                 new = Order(
                     CustomerName=form.CustomerName.data,
                     JobName=form.JobName.data,
+                    destination=form.destination.data,
+                    po=form.po.data,
+                    city=form.city.data,
                     MapscoLocation=form.MapscoLocation.data,
                     Source=form.Source.data,
                     JobNumber=form.JobNumber.data,
@@ -89,12 +144,6 @@ def new_order():
 
 
 def job_nums():
-    # prepare = Jobs.query.distinct(Jobs.JobNumber).order_by(Jobs.JobNumber).all()
-    # res = []
-    # for i in prepare:
-    #     if Tickets.query.filter(Tickets.JobID == i.JobID).first():
-    #         res.append(i)
-    # return res
     all_job_numbers = db.session.query(Tickets.JobNumber).distinct().order_by(Tickets.JobNumber).all()
     return [j[0] for j in all_job_numbers]
 
@@ -102,22 +151,6 @@ def job_nums():
 def truck_nums():
     all_truck_numbers = db.session.query(Trucks.TruckNumber).distinct().order_by(Trucks.TruckNumber).all()
     return [j[0] for j in all_truck_numbers]
-
-
-@main_blueprint.route("/add_assign/<int:order_id>", methods=["POST"])
-@login_required
-def add_assign(order_id):
-    form = AssignForm()
-    if form.validate_on_submit():
-        new = Dispatch(
-            orderID=order_id,
-            TruckNumber=form.TruckNumber.data,
-            LoadsDispatched=form.LoadsDispatched.data
-        )
-        new.save()
-    else:
-        flash("Wrong data", "danger")
-    return redirect(url_for("main.index"))
 
 
 @main_blueprint.route("/edit_order/<int:order_id>", methods=["POST"])
@@ -128,6 +161,9 @@ def edit_order(order_id):
         elem = Order.query.get(order_id)
         elem.CustomerName = form.CustomerName.data
         elem.JobName = form.JobName.data
+        elem.destination = form.destination.data
+        elem.po = form.po.data
+        elem.city = form.city.data
         elem.MapscoLocation = form.MapscoLocation.data
         elem.Source = form.Source.data
         elem.JobNumber = form.JobNumber.data
@@ -172,91 +208,3 @@ def intransit():
         reversed=reversed,
         LoadsDispatched_function=LoadsDispatched_function,
     )
-# @main_blueprint.route("/search", methods=["GET", "POST"])
-# @login_required
-# def search_controller():
-#     form = OrderForm()
-#     if request.method == "POST":
-#         session["formdata"] = request.form
-#     elif request.method == "GET":
-#         formdata = session.get("formdata", None)
-#         if formdata:
-#             form = OrderForm(
-#                 CustomerName=formdata["CustomerName"],
-#                 JobName=formdata["JobName"],
-#                 MapscoLocation=formdata["MapscoLocation"],
-#                 JobNumber=formdata["JobNumber"],
-#                 MaterialName=formdata["MaterialName"],
-#                 LoadOutNum=formdata["LoadOutNum"],
-#                 TruckNumber=formdata["TruckNumber"],
-#                 SubcontractorName=formdata["SubcontractorName"],
-#             )
-#             form.validate()
-#     prepare = None
-#     if form.SubcontractorName.data:
-#         prepare = Tickets.query.filter(
-#             Tickets.SubcontractorName == form.SubcontractorName.data
-#         )
-#     if form.JobNumber.data and (prepare is None):
-#         prepare = Tickets.query.filter(Tickets.JobNumber == form.JobNumber.data)
-#     elif form.JobNumber.data and prepare:
-#         prepare = prepare.filter(Tickets.JobNumber == form.JobNumber.data)
-#     if form.MapscoLocation.data and (prepare is None):
-#         prepare = Tickets.query.filter(Tickets.JobNumber == form.MapscoLocation.data)
-#     elif form.MapscoLocation.data and prepare:
-#         prepare = prepare.filter(Tickets.MapscoLocation == form.MapscoLocation.data)
-#     if form.LoadOutNum.data and (prepare is None):
-#         prepare = Tickets.query.filter(Tickets.LoadOutNum == form.LoadOutNum.data)
-#     elif form.LoadOutNum.data and prepare:
-#         prepare = prepare.filter(Tickets.LoadOutNum == form.LoadOutNum.data)
-#     if form.TruckNumber.data:
-#         trucks = Trucks.query.filter(Trucks.TruckNumber == form.TruckNumber.data).all()
-#         truckids = [x.TruckID for x in trucks]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.TruckID.in_(truckids))
-#         else:
-#             prepare = prepare.filter(Tickets.TruckID.in_(truckids))
-#     if form.MaterialName.data:
-#         materials = Materials.query.filter(
-#             Materials.MaterialName == form.MaterialName.data
-#         ).all()
-#         materialids = [x.MaterialID for x in materials]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.MaterialID.in_(materialids))
-#         else:
-#             prepare = prepare.filter(Tickets.MaterialID.in_(materialids))
-#     if form.JobName.data:
-#         jobs = Jobs.query.filter(Jobs.JobName == form.JobName.data).all()
-#         jobids = [x.JobID for x in jobs]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.JobID.in_(jobids))
-#         else:
-#             prepare = prepare.filter(Tickets.JobID.in_(jobids))
-#     if form.CustomerName.data:
-#         customers = Customer.query.filter(
-#             Customer.CustomerName == form.CustomerName.data
-#         ).all()
-#         customerids = [x.CustomerID for x in customers]
-#         if prepare is None:
-#             prepare = Tickets.query.filter(Tickets.CustomerID.in_(customerids))
-#         else:
-#             prepare = prepare.filter(Tickets.CustomerID.in_(customerids))
-#     new_table = None
-#     page = request.args.get("page", 1, type=int)
-#     if prepare:
-#         new_table = prepare.order_by(Tickets.TicketID.desc()).paginate(
-#             page=page, per_page=15
-#         )
-#     form = EditForm()
-#     if not new_table:
-#         return redirect(url_for("main.index"))
-#     return render_template(
-#         "search.html",
-#         new_table=new_table,
-#         form=form,
-#         Customer=Customer,
-#         Jobs=Jobs,
-#         Tickets=Tickets,
-#         Trucks=Trucks,
-#         Materials=Materials,
-#     )

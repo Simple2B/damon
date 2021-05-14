@@ -1,60 +1,84 @@
-{% extends "base.html" %}
-
-{% block content %}
-<h2 style="text-align: center;">New Order</h2>
+{% extends "base.html" %} {% block content %}
+<h2 class="text-center">New Order</h2>
 <form class="form" role="form" action="" method="post">
-    <div class="__modal-inputs--flex-row modal-content" style="width:100%; text-align:center;">
-      <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="">
-      <div class="row justify-content-center">
-        {{form.CustomerName.label(class="col-sm-3 col-form-label")}}
-        {{form.CustomerName(class='_form-input _form-input--m col-sm-4')}}
-      </div>
+  <div class="__modal-inputs--flex-row modal-content cont-new-order">
+    <input id="hidden_ticket_id" type="hidden" name="ticket_id" value="" />
+    <div class="row justify-content-center">
+      {{form.CustomerName.label(class="col-sm-3 col-form-label")}}
+      {{form.CustomerName(class='_form-input _form-input--m col-sm-4')}}
+    </div>
 
-      <div class="row justify-content-center">
-        {{form.JobName.label(class="col-sm-3 col-form-label")}}
-        {{form.JobName(class='_form-input _form-input--m col-sm-4')}}
-      </div>
+    <div class="row justify-content-center">
+      {{form.JobName.label(class="col-sm-3 col-form-label")}}
+      {{form.JobName(class='_form-input _form-input--m col-sm-4')}}
+    </div>
 
-      <div class="row justify-content-center">
-        {{form.MapscoLocation.label(class="col-sm-3 col-form-label")}}
-        {{form.MapscoLocation(class='_form-input _form-input--m col-sm-4')}}
-      </div>
+    <div class="row justify-content-center">
+      {{form.destination.label(class="col-sm-3 col-form-label")}}
+      {{form.destination(class='_form-input _form-input--m col-sm-4')}}
+    </div>
 
-      <div class="row justify-content-center">
-        {{form.JobNumber.label(class="col-sm-3 col-form-label")}}
-        {{form.JobNumber(class='_form-input _form-input--m col-sm-3', list="job-number-list")}}
-        <datalist id="job-number-list">
-          {% for i in job_numbers%}
-          <option value="{{ i }}">
-          {% endfor %}
-        </datalist>
-        {{ form.lookup(class='btn btn-primary col-sm-0 ml-1') }}
-      </div>
+    <div class="row justify-content-center">
+      {{form.po.label(class="col-sm-3 col-form-label")}}
+      {{form.po(class='_form-input _form-input--m col-sm-4')}}
+    </div>
 
-      <div class="row justify-content-center">
-        {{form.MaterialName.label(class="col-sm-3 col-form-label")}}
-        {{form.MaterialName(class='_form-input _form-input--m col-sm-4')}}
-      </div>
+    <div class="row justify-content-center">
+      {{form.city.label(class="col-sm-3 col-form-label")}}
+      {{form.city(class='_form-input _form-input--m col-sm-4 border-color')}}
+    </div>
 
-      <div class="row justify-content-center">
-        {{form.LoadTotal.label(class="col-sm-3 col-form-label")}}
-        {{form.LoadTotal(class='_form-input _form-input--m col-sm-4')}}
-      </div>
+    <div class="row justify-content-center">
+      {{form.MapscoLocation.label(class="col-sm-3 col-form-label")}}
+      {{form.MapscoLocation(class='_form-input _form-input--m col-sm-4')}}
+    </div>
 
-      <div class="row justify-content-center">
-        {{form.Source.label(class="col-sm-3 col-form-label")}}
-        {{form.Source(class='_form-input _form-input--m col-sm-4')}}
-      </div>
+    <div class="row justify-content-center">
+      {{form.JobNumber.label(class="col-sm-3 col-form-label")}}
+      {{form.JobNumber(class='_form-input _form-input--m col-sm-3',
+      list="job-number-list")}}
+      <datalist id="job-number-list">
+        {% for i in job_numbers%}
+        <option value="{{ i }}">{% endfor %}</option>
+      </datalist>
 
-      <div class="row justify-content-center mt-5">
-        {{ form.submit(class='btn btn-primary col-sm-2 ml-2') }}
-        <button onclick="location.href='/'" type="button" class='btn btn-secondary col-sm-2 ml-2'>Cancel</button>
-      </div>
-{% endblock %}
-{% block scripts %}
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+      {{ form.lookup(class='btn btn-primary col-sm-0 ml-1') }}
+    </div>
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-{% endblock %}
+    <div class="row justify-content-center">
+      {{form.MaterialName.label(class="col-sm-3 col-form-label")}}
+      {{form.MaterialName(class='_form-input _form-input--m col-sm-4')}}
+    </div>
+
+    <div class="row justify-content-center">
+      {{form.LoadTotal.label(class="col-sm-3 col-form-label")}}
+      {{form.LoadTotal(class='_form-input _form-input--m col-sm-4')}}
+    </div>
+
+    <div class="row justify-content-center">
+      {{form.Source.label(class="col-sm-3 col-form-label")}}
+      {{form.Source(class='_form-input _form-input--m col-sm-4')}}
+    </div>
+
+    <div class="row justify-content-center mt-5">
+      {{ form.submit(class='btn btn-primary col-sm-2 ml-2') }}
+      <button
+        onclick="location.href='/'"
+        type="button"
+        class="btn btn-secondary col-sm-2 ml-2"
+      >
+        Cancel
+      </button>
+    </div>
+    {% endblock %} {% block scripts %}
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
+    />
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    {% endblock %}
+  </div>
+</form>

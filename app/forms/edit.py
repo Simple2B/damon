@@ -6,6 +6,12 @@ class EditForm(FlaskForm):
 
     CustomerName = StringField('CustomerName')
     JobName = StringField('JobName')
+    destination = StringField('Destination')
+    po = StringField('PO')
+    city = SelectField('City', choices=[
+        ('fw', 'Fort Worth'),
+        ('dal', 'Dallas')
+    ])
     MapscoLocation = StringField('MapscoLocation')
     Source = StringField('Source')
     JobNumber = StringField('JobNumber')
