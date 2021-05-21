@@ -29,4 +29,6 @@ class Order(db.Model, ModelMixin):
     po = db.Column(db.String(64))
     city = db.Column(Enum(City))
 
+    LoadDispatchTotal = db.Column(db.Integer)  # Required for backward compatibility
+
     dispatches = relationship('Dispatch')

@@ -169,7 +169,7 @@ def edit_order(order_id):
         elem.JobNumber = form.JobNumber.data
         elem.MaterialName = form.MaterialName.data
         elem.LoadTotal = form.LoadTotal.data
-        elem.LoadDispatchTotal = form.LoadDispatchTotal.data
+        elem.LoadDispatchTotal = form.LoadDispatchTotal.data  # Should this be deleted, cause I think that was the problem why we couldn't lift off
         elem.Status = form.Status.data
         elem.save()
     else:
