@@ -45,7 +45,7 @@ class ProductionConfig(BaseConfig):
 
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         'DATABASE_URL', 'sqlite:///' + os.path.join(BASE_DIR, 'database.sqlite3'))
-    WTF_CSRF_ENABLED = True
+    WTF_CSRF_ENABLED = False
 
 
 config = dict(
