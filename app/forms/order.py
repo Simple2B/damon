@@ -28,3 +28,8 @@ class OrderForm(FlaskForm):
     Source = StringField('Source')
     lookup = SubmitField('LookUp')
     submit = SubmitField('Submit')
+    Status = SelectField('Status', choices=[
+        ('InTransit', 'InTransit'),
+        ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled')
+        ])
