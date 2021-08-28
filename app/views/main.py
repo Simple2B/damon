@@ -136,7 +136,8 @@ def new_order():
                     JobNumber=form.JobNumber.data,
                     MaterialName=form.MaterialName.data,
                     LoadTotal=form.LoadTotal.data,
-                    Status=form.Status.data
+                    Status=form.Status.data,
+                    created=form.creation_date.data
                 )
                 new.save()
                 return redirect(url_for("main.index"))

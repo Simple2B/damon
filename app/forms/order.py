@@ -1,8 +1,9 @@
 import enum
+from datetime import date
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField
-from wtforms.fields.core import SelectField
+from wtforms.fields.core import DateField, SelectField
 
 
 class StatusLevel(enum.Enum):
@@ -28,6 +29,7 @@ class OrderForm(FlaskForm):
     Source = StringField('Source')
     lookup = SubmitField('LookUp')
     submit = SubmitField('Submit')
+    creation_date = DateField("Date", default=date.today())
     Status = SelectField('Status', choices=[
         ('InTransit', 'InTransit'),
         ('Delivered', 'Delivered'),
