@@ -1,4 +1,5 @@
 import enum
+from datetime import date
 from sqlalchemy import Enum
 from app import db
 from app.models.utils import ModelMixin
@@ -24,7 +25,7 @@ class Order(db.Model, ModelMixin):
     Status = db.Column(db.String(9))
     # Updates
     destination = db.Column(db.String(64))
-    created = db.Column(db.Date)
+    created = db.Column(db.Date, default=date.today())
     po = db.Column(db.String(64))
     city = db.Column(Enum(City))
 
