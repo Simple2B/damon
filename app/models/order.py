@@ -27,6 +27,7 @@ class Order(db.Model, ModelMixin):
     destination = db.Column(db.String(64))
     created = db.Column(db.Date, default=date.today())
     po = db.Column(db.String(64))
+    contact = db.Column(db.String(128))
     city = db.Column(Enum(City))
 
     LoadDispatchTotal = db.Column(db.Integer)  # Required for backward compatibility
