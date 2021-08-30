@@ -147,6 +147,7 @@
   <tr>
     <th>CustomerName</th>
     <th>JobName</th>
+    <th>Contact</th>
     <th>Destination</th>
     <th>Date</th>
     <th>PO</th>
@@ -166,6 +167,7 @@
     {% if new_table_item.city.value == "Dallas" %}
     <td class="color-dallas">{{ new_table_item.CustomerName }}</td>
     <td class="color-dallas">{{ new_table_item.JobName }}</td>
+    <td class="color-dallas">{{ new_table_item.contact }}</td>
     <td class="color-dallas">{{ new_table_item.destination }}</td>
     <td class="color-dallas">{{ new_table_item.created }}</td>
     <td class="color-dallas">{{ new_table_item.po }}</td>
@@ -174,7 +176,7 @@
     <td class="color-dallas">{{ new_table_item.Source }}</td>
     <td class="color-dallas">{{ new_table_item.JobNumber }}</td>
     <td class="color-dallas">{{ new_table_item.MaterialName }}</td>
-    <td class="color-dallas">{{ new_table_item.LoadTotal }}/{{ LoadsDispatched_function(new_table_item) }}</td>
+    <td class="color-dallas">{{ LoadsDispatched_function(new_table_item) }}/{{ new_table_item.LoadTotal }}</td>
     <td class="color-dallas">
       {% for dispatch in new_table_item.dispatches %}
         {{ dispatch.TruckNumber }}({{ dispatch.LoadsDispatched }})
@@ -183,6 +185,7 @@
     {% else %}
     <td>{{ new_table_item.CustomerName }}</td>
     <td>{{ new_table_item.JobName }}</td>
+    <td>{{ new_table_item.contact }}</td>
     <td>{{ new_table_item.destination }}</td>
     <td>{{ new_table_item.created }}</td>
     <td>{{ new_table_item.po }}</td>
@@ -191,7 +194,7 @@
     <td>{{ new_table_item.Source }}</td>
     <td>{{ new_table_item.JobNumber }}</td>
     <td>{{ new_table_item.MaterialName }}</td>
-    <td>{{ new_table_item.LoadTotal }}/{{ LoadsDispatched_function(new_table_item) }}</td>
+    <td>{{ LoadsDispatched_function(new_table_item) }}/{{ new_table_item.LoadTotal }}</td>
     <td>
       {% for dispatch in new_table_item.dispatches %}
         {{ dispatch.TruckNumber }}({{ dispatch.LoadsDispatched }})
@@ -201,6 +204,7 @@
     <td><button type="button" class="cursor" data-toggle="modal" data-target="#modalEdit"
         data-customername="{{new_table_item.CustomerName}}"
         data-jobname="{{new_table_item.JobName}}"
+        data-contact="{{new_table_item.contact}}"
         data-destination="{{new_table_item.destination}}"
         data-po="{{new_table_item.po}}"
         data-city="{{new_table_item.city}}"
