@@ -30,6 +30,7 @@ class OrderForm(FlaskForm):
     lookup = SubmitField('LookUp')
     submit = SubmitField('Submit')
     creation_date = DateField("Date", default=date.today())
+    contact = StringField("Contact")
     Status = SelectField('Status', choices=[
         ('InTransit', 'InTransit'),
         ('Delivered', 'Delivered'),
